@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNexus AI — K-Bio Global Sourcing Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   BioNexus AI — Global K-Bio Sourcing Platform
+   Design: Dark Glassmorphism · Bio-Tech Futurism
+   ══════════════════════════════════════════ */
+
+:root {
+  /* Core Colors */
+  --c-bg:        #050A14;
+  --c-bg2:       #080F1E;
+  --c-surface:   rgba(10, 20, 45, 0.7);
+  --c-surface2:  rgba(14, 28, 58, 0.55);
+  --c-border:    rgba(0, 255, 178, 0.10);
+  --c-border2:   rgba(0, 194, 255, 0.14);
+
+  /* Accent Colors */
+  --green:  #00FFB2;
+  --blue:   #00C2FF;
+  --violet: #A855F7;
+  --gold:   #F59E0B;
+  --red:    #FF4D6D;
+  --cyan:   #22D3EE;
+
+  /* Text */
+  --t1: #EDF4FF;
+  --t2: rgba(237, 244, 255, 0.60);
+  --t3: rgba(237, 244, 255, 0.35);
+  --t4: rgba(237, 244, 255, 0.18);
+
+  /* Fonts */
+  --ff-head: 'Syne', sans-serif;
+  --ff-body: 'Noto Sans KR', sans-serif;
+  --ff-mono: 'JetBrains Mono', monospace;
+
+  /* Layout */
+  --sidebar-w: 240px;
+  --topbar-h:  64px;
+  --radius:    14px;
+  --radius-sm: 8px;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--ff-body);
+  background: var(--c-bg);
+  color: var(--t1);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+input, select, button, textarea { font-family: inherit; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,255,178,0.2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,255,178,0.4); }
+
+/* ─── PARTICLE CANVAS ─── */
+#particleCanvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+.cursor-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); pointer-events: none;
+  position: fixed; z-index: 9999; top: 0; left: 0;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+}
+.cursor-ring {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid rgba(0,255,178,0.4); pointer-events: none;
+  position: fixed; z-index: 9998; top: 0; left: 0;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.2s, height 0.2s, border-color 0.2s;
+}
+.cursor-ring.expanded { width: 42px; height: 42px; border-color: var(--green); }
+@media (hover: none) { .cursor-dot, .cursor-ring { display: none; } }
+
+/* ═══════════ SIDEBAR ═══════════ */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: rgba(6, 12, 28, 0.92);
+  backdrop-filter: blur(24px);
+  border-right: 1px solid var(--c-border);
+  z-index: 200;
+  display: flex; flex-direction: column;
+  padding: 0 0 24px;
+  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+}
+.sidebar-logo {
+  display: flex; align-items: center; gap: 12px;
+  padding: 24px 22px 20px;
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: 12px;
+}
+.logo-mark { flex-shrink: 0; }
+.logo-text { display: flex; flex-direction: column; }
+.logo-main {
+  font-family: var(--ff-head); font-size: 1.1rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+.logo-sub {
+  font-size: 0.62rem; color: var(--t3);
+  font-family: var(--ff-mono); letter-spacing: 1px;
+  text-transform: uppercase; margin-top: 1px;
+}
+.nav-section-label {
+  font-family: var(--ff-mono); font-size: 0.58rem;
+  color: var(--t4); letter-spacing: 2.5px; text-transform: uppercase;
+  padding: 14px 22px 6px;
+}
+.nav-list { list-style: none; padding: 0 12px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.2s;
+  position: relative; margin-bottom: 2px;
+  user-select: none;
+}
+.nav-item:hover { background: rgba(0,255,178,0.05); }
+.nav-item.active {
+  background: rgba(0,255,178,0.08);
+  border: 1px solid rgba(0,255,178,0.15);
+}
+.nav-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 18px; border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, var(--green), var(--blue));
+}
+.nav-icon { font-size: 0.85rem; color: var(--t3); width: 18px; text-align: center; flex-shrink: 0; }
+.nav-item.active .nav-icon { color: var(--green); }
+.nav-label { font-size: 0.83rem; color: var(--t2); flex: 1; font-weight: 500; }
+.nav-item.active .nav-label { color: var(--t1); }
+.nav-badge {
+  font-family: var(--ff-mono); font-size: 0.55rem;
+  padding: 2px 7px; border-radius: 20px;
+  background: rgba(0,255,178,0.12); color: var(--green);
+  border: 1px solid rgba(0,255,178,0.2);
+}
+.nav-badge.alert { background: rgba(255,77,109,0.12); color: var(--red); border-color: rgba(255,77,109,0.3); }
+.sidebar-bottom { margin-top: auto; padding: 0 12px; }
+.user-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  cursor: pointer; transition: border-color 0.2s;
+}
+.user-card:hover { border-color: var(--c-border2); }
+.user-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 700; color: #000; flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-plan { font-size: 0.65rem; color: var(--t3); font-family: var(--ff-mono); margin-top: 1px; }
+.user-status {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green); flex-shrink: 0;
+  box-shadow: 0 0 6px var(--green);
+}
+
+/* ═══════════ MOBILE TOPBAR ═══════════ */
+.topbar-mobile {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 201;
+  background: rgba(5, 10, 20, 0.95); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-border);
+  align-items: center; padding: 0 16px; gap: 12px;
+}
+.menu-btn {
+  background: none; border: none; cursor: pointer; padding: 6px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.menu-btn span { display: block; width: 18px; height: 1.5px; background: var(--t1); transition: all 0.3s; }
+.topbar-actions { margin-left: auto; }
+.icon-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--t2); padding: 8px; border-radius: var(--radius-sm);
+  position: relative; transition: color 0.2s;
+}
+.icon-btn:hover { color: var(--t1); }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); border: 1px solid var(--c-bg);
+}
+
+/* ═══════════ MAIN CONTENT ═══════════ */
+.main-content {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+}
+
+/* ─── CONTENT TOPBAR ─── */
+.content-topbar {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--topbar-h);
+  background: rgba(5, 10, 20, 0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; gap: 20px;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.breadcrumb {
+  font-family: var(--ff-head); font-size: 0.88rem; font-weight: 600; color: var(--t2);
+}
+.realtime-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--ff-mono); font-size: 0.6rem;
+  color: var(--green); letter-spacing: 1px; text-transform: uppercase;
+  background: rgba(0,255,178,0.06); border: 1px solid rgba(0,255,178,0.15);
+  padding: 4px 10px; border-radius: 20px;
+}
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--green); }
+  50% { opacity: 0.5; box-shadow: 0 0 10px var(--green); }
+}
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.search-bar-mini {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm); padding: 7px 14px;
+  transition: border-color 0.2s;
+}
+.search-bar-mini:focus-within { border-color: rgba(0,255,178,0.3); }
+.search-bar-mini svg { color: var(--t3); flex-shrink: 0; }
+.search-bar-mini input {
+  background: none; border: none; outline: none;
+  font-size: 0.82rem; color: var(--t1); width: 160px;
+}
+.search-bar-mini input::placeholder { color: var(--t3); }
+.user-avatar-sm {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; font-weight: 700; color: #000; cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ═══════════ VIEWS ═══════════ */
+.view {
+  display: none; flex-direction: column;
+  padding: 32px; gap: 24px; flex: 1;
+  animation: viewIn 0.3s ease;
+}
+.view.active { display: flex; }
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.view-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; gap: 20px; flex-wrap: wrap;
+}
+.view-title {
+  font-family: var(--ff-head); font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800; line-height: 1.15; letter-spacing: -0.02em;
+}
+.gradient-text {
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.view-subtitle { font-size: 0.88rem; color: var(--t2); margin-top: 6px; line-height: 1.6; }
+.wave { display: inline-block; animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; }
+@keyframes wave { 0%,100%{transform:rotate(0)} 30%{transform:rotate(20deg)} 60%{transform:rotate(-10deg)} }
+
+/* ═══════════ GLASS CARDS ═══════════ */
+.glass-card {
+  background: var(--c-surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.glass-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg, rgba(0,255,178,0.02) 0%, transparent 60%);
+  pointer-events: none;
+}
+.glass-card:hover { border-color: rgba(0,255,178,0.2); }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
+}
+.card-title {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--ff-head); font-size: 0.92rem; font-weight: 700;
+}
+.card-title-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.card-title-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.card-title-dot.blue  { background: var(--blue);  box-shadow: 0 0 6px var(--blue); }
+.card-title-dot.red   { background: var(--red);   box-shadow: 0 0 6px var(--red); }
+.card-title-dot.violet{ background: var(--violet);box-shadow: 0 0 6px var(--violet); }
+.card-title-dot.gold  { background: var(--gold);  box-shadow: 0 0 6px var(--gold); }
+.card-meta { font-size: 0.72rem; color: var(--t3); font-family: var(--ff-mono); }
+
+/* Grid helpers */
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+
+/* ═══════════ KPI CARDS ═══════════ */
+.kpi-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+.kpi-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius); padding: 22px 20px;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  backdrop-filter: blur(20px);
+  display: flex; align-items: center; gap: 16px;
+  transition: all 0.3s;
+}
+.kpi-card:hover { transform: translateY(-3px); }
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.kpi-green::before { background: linear-gradient(90deg, var(--green), transparent); }
+.kpi-blue::before  { background: linear-gradient(90deg, var(--blue), transparent); }
+.kpi-violet::before{ background: linear-gradient(90deg, var(--violet), transparent); }
+.kpi-gold::before  { background: linear-gradient(90deg, var(--gold), transparent); }
+.kpi-icon { font-size: 1.8rem; flex-shrink: 0; }
+.kpi-body { flex: 1; min-width: 0; }
+.kpi-label { font-size: 0.72rem; color: var(--t3); text-transform: uppercase; letter-spacing: 1px; font-family: var(--ff-mono); }
+.kpi-value { font-family: var(--ff-head); font-size: 1.9rem; font-weight: 800; line-height: 1.2; margin: 3px 0; }
+.kpi-green .kpi-value { color: var(--green); }
+.kpi-blue .kpi-value  { color: var(--blue); }
+.kpi-violet .kpi-value{ color: var(--violet); }
+.kpi-gold .kpi-value  { color: var(--gold); }
+.kpi-delta { font-size: 0.72rem; font-family: var(--ff-mono); }
+.kpi-delta.up   { color: var(--green); }
+.kpi-delta.down { color: var(--blue); }
+.kpi-spark {
+  position: absolute; bottom: 0; right: 0;
+  width: 90px; height: 35px; opacity: 0.5;
+}
+
+/* ═══════════ DASHBOARD GRID ═══════════ */
+.dash-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+
+/* ─── AI Recommendations ─── */
+.rec-list { display: flex; flex-direction: column; gap: 10px; }
+.rec-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  cursor: pointer; transition: all 0.2s;
+}
+.rec-item:hover {
+  border-color: rgba(0,255,178,0.25);
+  background: rgba(0,255,178,0.04);
+  transform: translateX(4px);
+}
+.rec-rank {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(0,255,178,0.1); border: 1px solid rgba(0,255,178,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-mono); font-size: 0.7rem; color: var(--green);
+}
+.rec-info { flex: 1; min-width: 0; }
+.rec-name { font-size: 0.88rem; font-weight: 600; }
+.rec-sub  { font-size: 0.72rem; color: var(--t3); margin-top: 2px; }
+.rec-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.rec-score { font-family: var(--ff-mono); font-size: 0.9rem; color: var(--green); font-weight: 600; }
+.reg-chips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.reg-chip {
+  font-size: 0.56rem; padding: 2px 7px; border-radius: 20px; font-family: var(--ff-mono);
+}
+.rc-fda    { background: rgba(0,255,178,0.1); color: var(--green); border: 1px solid rgba(0,255,178,0.2); }
+.rc-eu     { background: rgba(0,194,255,0.1); color: var(--blue); border: 1px solid rgba(0,194,255,0.2); }
+.rc-kfda   { background: rgba(168,85,247,0.1); color: var(--violet); border: 1px solid rgba(168,85,247,0.25); }
+.rc-jp     { background: rgba(245,158,11,0.1); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); }
+
+/* ─── Alerts ─── */
+.alert-list { display: flex; flex-direction: column; gap: 8px; }
+.alert-item {
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  background: rgba(255,77,109,0.05); border: 1px solid rgba(255,77,109,0.15);
+  cursor: pointer; transition: all 0.2s;
+}
+.alert-item:hover { border-color: rgba(255,77,109,0.3); }
+.alert-item.warn {
+  background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.2);
+}
+.alert-country { font-size: 0.68rem; color: var(--t3); font-family: var(--ff-mono); margin-bottom: 4px; }
+.alert-text { font-size: 0.8rem; color: var(--t1); line-height: 1.4; }
+.alert-date { font-size: 0.65rem; color: var(--t4); margin-top: 4px; font-family: var(--ff-mono); }
+.badge-alert {
+  font-size: 0.6rem; font-family: var(--ff-mono);
+  padding: 3px 8px; border-radius: 20px;
+  background: rgba(255,77,109,0.12); color: var(--red);
+  border: 1px solid rgba(255,77,109,0.3);
+}
+.badge-new {
+  font-size: 0.6rem; font-family: var(--ff-mono);
+  padding: 3px 8px; border-radius: 20px;
+  background: rgba(245,158,11,0.12); color: var(--gold);
+  border: 1px solid rgba(245,158,11,0.3);
+  animation: badge-glow 2s ease-in-out infinite;
+}
+@keyframes badge-glow {
+  0%,100% { box-shadow: none; }
+  50% { box-shadow: 0 0 8px rgba(245,158,11,0.3); }
+}
+
+/* ─── Chart Tabs ─── */
+.chart-tabs { display: flex; gap: 4px; }
+.chart-tab {
+  padding: 4px 10px; border-radius: var(--radius-sm);
+  font-size: 0.7rem; font-family: var(--ff-mono);
+  background: none; border: 1px solid var(--c-border);
+  color: var(--t3); cursor: pointer; transition: all 0.2s;
+}
+.chart-tab.active, .chart-tab:hover {
+  background: rgba(0,255,178,0.08); color: var(--green);
+  border-color: rgba(0,255,178,0.25);
+}
+
+/* ─── Country List ─── */
+.country-list { display: flex; flex-direction: column; gap: 10px; }
+.country-item { display: flex; align-items: center; gap: 10px; }
+.country-flag { font-size: 1.1rem; flex-shrink: 0; }
+.country-name { font-size: 0.82rem; flex: 1; }
+.country-bar-track { flex: 2; height: 4px; background: var(--c-border); border-radius: 2px; overflow: hidden; }
+.country-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--green), var(--blue)); }
+.country-pct { font-family: var(--ff-mono); font-size: 0.72rem; color: var(--t2); width: 36px; text-align: right; }
+
+/* ─── Table ─── */
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.data-table th {
+  padding: 10px 14px; font-size: 0.7rem; letter-spacing: 1px;
+  text-transform: uppercase; font-weight: 600; color: var(--t3);
+  background: rgba(0,0,0,0.2); font-family: var(--ff-mono);
+  white-space: nowrap; border-bottom: 1px solid var(--c-border);
+  position: sticky; top: 0;
+}
+.data-table td {
+  padding: 12px 14px; font-size: 0.82rem; color: var(--t2);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  white-space: nowrap; transition: background 0.15s;
+}
+.data-table tr:hover td { background: rgba(0,255,178,0.02); }
+.data-table td:first-child { color: var(--t1); font-weight: 600; }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 20px; font-size: 0.68rem;
+  font-family: var(--ff-mono);
+}
+.sb-completed  { background: rgba(0,255,178,0.08); color: var(--green); border: 1px solid rgba(0,255,178,0.2); }
+.sb-processing { background: rgba(0,194,255,0.08); color: var(--blue); border: 1px solid rgba(0,194,255,0.2); }
+.sb-pending    { background: rgba(245,158,11,0.08); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); }
+.sb-review     { background: rgba(255,77,109,0.08); color: var(--red); border: 1px solid rgba(255,77,109,0.2); }
+
+/* ═══════════ BUTTONS ═══════════ */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  color: #000; font-weight: 700; font-size: 0.83rem;
+  border: none; cursor: pointer; letter-spacing: 0.3px;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,255,178,0.2); }
+.btn-primary:active { transform: translateY(0); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 22px; border-radius: var(--radius-sm);
+  background: transparent; color: var(--t1); font-size: 0.83rem; font-weight: 600;
+  border: 1px solid var(--c-border2); cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-outline:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,178,0.04); }
+.btn-text {
+  background: none; border: none; cursor: pointer;
+  font-size: 0.78rem; color: var(--green); transition: opacity 0.2s;
+}
+.btn-text:hover { opacity: 0.7; }
+.full-width { width: 100%; justify-content: center; }
+
+/* ═══════════ AI SEARCH ═══════════ */
+.search-hero {
+  position: relative; border-radius: var(--radius);
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  padding: 36px 32px; overflow: hidden;
+}
+.search-glow {
+  position: absolute; width: 400px; height: 200px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0,255,178,0.08) 0%, transparent 70%);
+  top: -50px; left: 50%; transform: translateX(-50%);
+  pointer-events: none;
+}
+.search-tags-row {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.stag {
+  padding: 7px 14px; border-radius: 20px; font-size: 0.78rem;
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  cursor: pointer; transition: all 0.2s;
+}
+.stag:hover, .stag.active {
+  background: rgba(0,255,178,0.08); border-color: rgba(0,255,178,0.3); color: var(--green);
+}
+.search-input-wrap {
+  display: flex; align-items: center; gap: 0;
+  background: rgba(0,0,0,0.3); border: 1.5px solid rgba(0,255,178,0.3);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,255,178,0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input-wrap:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 40px rgba(0,255,178,0.1);
+}
+.search-ai-indicator {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 16px; height: 58px; border-right: 1px solid rgba(0,255,178,0.15);
+  font-family: var(--ff-mono); font-size: 0.65rem; color: var(--green);
+  white-space: nowrap; flex-shrink: 0;
+}
+.ai-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.search-main-input {
+  flex: 1; background: none; border: none; outline: none;
+  padding: 0 20px; height: 58px; font-size: 1rem; color: var(--t1);
+}
+.search-main-input::placeholder { color: var(--t3); }
+.search-filters-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 18px; height: 58px;
+  border-left: 1px solid rgba(0,255,178,0.15);
+  font-size: 0.78rem; color: var(--t2); cursor: pointer;
+  white-space: nowrap; transition: color 0.2s; flex-shrink: 0;
+}
+.search-filters-btn:hover { color: var(--green); }
+.search-submit-btn {
+  width: 58px; height: 58px; background: linear-gradient(135deg, var(--green), var(--blue));
+  border: none; cursor: pointer; color: #000;
+  display: flex; align-items: center; justify-content: center;
+  transition: filter 0.2s; flex-shrink: 0;
+}
+.search-submit-btn:hover { filter: brightness(1.1); }
+
+/* Filter Panel */
+.filter-panel { margin-top: 16px; padding: 20px 24px; }
+.filter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.filter-group {}
+.filter-label {
+  font-size: 0.72rem; color: var(--t3); font-family: var(--ff-mono);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; display: block;
+}
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.fchip {
+  padding: 5px 12px; border-radius: 20px; font-size: 0.75rem;
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  cursor: pointer; transition: all 0.2s;
+}
+.fchip:hover { border-color: rgba(0,255,178,0.3); color: var(--green); }
+.fchip.active { background: rgba(0,255,178,0.08); border-color: rgba(0,255,178,0.3); color: var(--green); }
+.fchip.ewg-1 { color: var(--green); }
+.fchip.ewg-2 { color: var(--gold); }
+.fchip.ewg-3 { color: var(--red); }
+.price-range { display: flex; flex-direction: column; gap: 8px; }
+.range-slider {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  border-radius: 2px; background: var(--c-border);
+  outline: none;
+}
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--green); cursor: pointer; border: 2px solid var(--c-bg);
+  box-shadow: 0 0 8px rgba(0,255,178,0.4);
+}
+.range-val { font-family: var(--ff-mono); font-size: 0.72rem; color: var(--green); }
+
+/* Search Results */
+.search-results-area {}
+.results-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.results-count { font-size: 0.82rem; color: var(--t2); }
+.results-count span { color: var(--green); font-weight: 600; }
+.sort-select {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  color: var(--t1); padding: 7px 12px; border-radius: var(--radius-sm);
+  font-size: 0.78rem; cursor: pointer; outline: none;
+}
+.results-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+/* Ingredient Card */
+.ing-card {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--radius); padding: 20px;
+  cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden;
+}
+.ing-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+}
+.ing-card:hover { border-color: rgba(0,255,178,0.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.ing-card:hover::before { transform: scaleX(1); }
+.ing-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.ing-icon { font-size: 1.6rem; }
+.ing-match-score {
+  font-family: var(--ff-mono); font-size: 0.85rem; font-weight: 600; color: var(--green);
+  background: rgba(0,255,178,0.08); border: 1px solid rgba(0,255,178,0.2);
+  padding: 3px 10px; border-radius: 20px;
+}
+.ing-name { font-family: var(--ff-head); font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+.ing-inci { font-size: 0.72rem; color: var(--t3); font-family: var(--ff-mono); margin-bottom: 10px; }
+.ing-effects { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.effect-tag {
+  font-size: 0.65rem; padding: 3px 9px; border-radius: 20px;
+  background: rgba(0,194,255,0.08); color: var(--blue); border: 1px solid rgba(0,194,255,0.2);
+}
+.ing-card-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 12px; border-top: 1px solid var(--c-border);
+}
+.ing-price { font-family: var(--ff-mono); font-size: 0.82rem; color: var(--t1); }
+.ing-price span { color: var(--green); font-weight: 600; }
+.ing-regs { display: flex; gap: 4px; }
+
+/* ═══════════ REGULATORY ═══════════ */
+.reg-layout { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
+.country-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.reg-country-btn {
+  padding: 12px 10px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.reg-country-btn:hover, .reg-country-btn.active {
+  background: rgba(0,255,178,0.06); border-color: rgba(0,255,178,0.25);
+}
+.reg-country-btn:hover .rcb-flag { transform: scale(1.2); }
+.rcb-flag { font-size: 1.5rem; display: block; transition: transform 0.2s; margin-bottom: 4px; }
+.rcb-name { font-size: 0.72rem; color: var(--t2); }
+.rcb-status {
+  width: 6px; height: 6px; border-radius: 50%; margin: 4px auto 0;
+}
+.rcb-status.ok   { background: var(--green); box-shadow: 0 0 5px var(--green); }
+.rcb-status.warn { background: var(--gold); box-shadow: 0 0 5px var(--gold); }
+
+.reg-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 300px; gap: 16px;
+}
+.reg-ph-icon { font-size: 3rem; opacity: 0.3; }
+.reg-ph-text { text-align: center; color: var(--t3); line-height: 1.6; font-size: 0.88rem; }
+
+.reg-detail-inner { padding: 4px; }
+.reg-country-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+}
+.reg-c-flag { font-size: 2.5rem; }
+.reg-c-info { flex: 1; }
+.reg-c-name { font-family: var(--ff-head); font-size: 1.3rem; font-weight: 700; }
+.reg-c-agency { font-size: 0.78rem; color: var(--t3); font-family: var(--ff-mono); }
+.reg-overall-badge {
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-family: var(--ff-mono); font-size: 0.75rem; font-weight: 600;
+}
+.rob-green { background: rgba(0,255,178,0.1); color: var(--green); border: 1px solid rgba(0,255,178,0.3); }
+.rob-gold  { background: rgba(245,158,11,0.1); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+
+.reg-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.reg-metric {
+  text-align: center; padding: 14px 10px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+}
+.reg-metric-val { font-family: var(--ff-head); font-size: 1.5rem; font-weight: 700; }
+.reg-metric-lbl { font-size: 0.65rem; color: var(--t3); margin-top: 3px; font-family: var(--ff-mono); }
+
+.reg-restrictions { margin-top: 16px; }
+.reg-restrictions h4 { font-size: 0.78rem; color: var(--t3); font-family: var(--ff-mono); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.restriction-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  background: rgba(255,77,109,0.04); border: 1px solid rgba(255,77,109,0.12);
+  margin-bottom: 8px; font-size: 0.8rem; color: var(--t2);
+}
+.ri-icon { flex-shrink: 0; color: var(--red); }
+.allowance-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  background: rgba(0,255,178,0.03); border: 1px solid rgba(0,255,178,0.1);
+  margin-bottom: 8px; font-size: 0.8rem; color: var(--t2);
+}
+.ai-icon { flex-shrink: 0; color: var(--green); }
+
+/* ═══════════ MARKETPLACE ═══════════ */
+.market-filters-row {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.mfilter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.mfilter-tab {
+  padding: 8px 18px; border-radius: 20px; font-size: 0.8rem;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  cursor: pointer; transition: all 0.2s;
+}
+.mfilter-tab:hover { border-color: rgba(0,255,178,0.3); }
+.mfilter-tab.active {
+  background: rgba(0,255,178,0.08); border-color: rgba(0,255,178,0.3); color: var(--green); font-weight: 600;
+}
+.mfilter-right { display: flex; gap: 6px; }
+.view-toggle {
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  color: var(--t3); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.view-toggle.active, .view-toggle:hover {
+  border-color: rgba(0,255,178,0.3); color: var(--green);
+}
+
+.market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.market-card {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--radius); overflow: hidden;
+  cursor: pointer; transition: all 0.25s;
+}
+.market-card:hover { border-color: rgba(0,255,178,0.3); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.35); }
+.market-card-img {
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; position: relative;
+  background: linear-gradient(135deg, rgba(0,255,178,0.05), rgba(0,194,255,0.05));
+}
+.market-card-badge {
+  position: absolute; top: 10px; right: 10px;
+  font-size: 0.6rem; font-family: var(--ff-mono); font-weight: 600;
+  padding: 3px 9px; border-radius: 20px;
+}
+.mcb-cert { background: rgba(0,255,178,0.15); color: var(--green); border: 1px solid rgba(0,255,178,0.3); }
+.mcb-hot  { background: rgba(255,77,109,0.15); color: var(--red); border: 1px solid rgba(255,77,109,0.3); }
+.mcb-new  { background: rgba(0,194,255,0.15); color: var(--blue); border: 1px solid rgba(0,194,255,0.3); }
+.market-card-body { padding: 16px; }
+.mc-name { font-family: var(--ff-head); font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; }
+.mc-supplier { font-size: 0.72rem; color: var(--t3); font-family: var(--ff-mono); margin-bottom: 10px; }
+.mc-effects { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.mc-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 12px; border-top: 1px solid var(--c-border);
+}
+.mc-price { font-family: var(--ff-mono); font-size: 0.82rem; }
+.mc-price b { color: var(--green); font-size: 1rem; }
+.mc-stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 1px; }
+.mc-btn {
+  padding: 6px 14px; border-radius: var(--radius-sm);
+  background: rgba(0,255,178,0.1); border: 1px solid rgba(0,255,178,0.2);
+  color: var(--green); font-size: 0.72rem; font-weight: 600; cursor: pointer;
+  transition: all 0.2s;
+}
+.mc-btn:hover { background: rgba(0,255,178,0.2); }
+
+/* ═══════════ SAMPLES / LOGISTICS ═══════════ */
+.samples-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+.sample-list { display: flex; flex-direction: column; gap: 12px; }
+.sample-item {
+  padding: 16px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  cursor: pointer; transition: all 0.2s;
+}
+.sample-item:hover { border-color: var(--c-border2); }
+.sample-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sample-name { font-size: 0.9rem; font-weight: 600; }
+.sample-id { font-family: var(--ff-mono); font-size: 0.65rem; color: var(--t3); }
+.sample-progress { height: 4px; background: var(--c-border); border-radius: 2px; overflow: hidden; margin: 8px 0; }
+.sp-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--green), var(--blue)); transition: width 1s ease; }
+.sample-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--t3); font-family: var(--ff-mono); }
+
+.track-content { padding: 8px 0; }
+.track-step {
+  display: flex; gap: 16px; align-items: flex-start; padding: 12px 0;
+  position: relative;
+}
+.track-step::after {
+  content: ''; position: absolute;
+  left: 11px; top: 36px; bottom: -12px; width: 1px;
+  background: var(--c-border);
+}
+.track-step:last-child::after { display: none; }
+.track-dot {
+  width: 23px; height: 23px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center; font-size: 0.65rem;
+}
+.td-done { background: rgba(0,255,178,0.15); border: 2px solid var(--green); color: var(--green); }
+.td-active { background: rgba(0,194,255,0.15); border: 2px solid var(--blue); color: var(--blue); animation: pulse-border 2s infinite; }
+.td-pending { background: rgba(255,255,255,0.04); border: 2px solid var(--c-border); color: var(--t4); }
+@keyframes pulse-border {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,194,255,0.4); }
+  50%      { box-shadow: 0 0 0 5px rgba(0,194,255,0); }
+}
+.track-info {}
+.track-title { font-size: 0.85rem; font-weight: 600; }
+.track-desc  { font-size: 0.72rem; color: var(--t3); margin-top: 2px; }
+.track-time  { font-family: var(--ff-mono); font-size: 0.65rem; color: var(--t4); margin-top: 3px; }
+
+.form-input {
+  width: 100%; padding: 12px 16px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  color: var(--t1); font-size: 0.85rem; outline: none;
+  margin-bottom: 12px; transition: border-color 0.2s;
+}
+.form-input:focus { border-color: rgba(0,255,178,0.35); }
+.form-input::placeholder { color: var(--t4); }
+.form-input option { background: #0a1428; }
+
+/* ═══════════ ANALYTICS ═══════════ */
+.analytics-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.trending-list { display: flex; flex-direction: column; gap: 10px; }
+.trend-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  transition: all 0.2s;
+}
+.trend-item:hover { border-color: rgba(0,255,178,0.2); }
+.trend-rank { font-family: var(--ff-head); font-size: 1.2rem; font-weight: 800; color: var(--t4); width: 24px; }
+.trend-info { flex: 1; }
+.trend-name { font-size: 0.85rem; font-weight: 600; }
+.trend-cat  { font-size: 0.68rem; color: var(--t3); }
+.trend-change { font-family: var(--ff-mono); font-size: 0.78rem; color: var(--green); font-weight: 600; }
+
+/* ═══════════ MODAL ═══════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  width: 90%; max-width: 680px; max-height: 85vh;
+  overflow-y: auto; position: relative;
+  transform: scale(0.95); transition: transform 0.25s;
+}
+.modal-overlay.open .modal { transform: scale(1); }
+.modal-close {
+  position: absolute; top: 16px; right: 16px; z-index: 1;
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+  width: 32px; height: 32px; border-radius: 50%;
+  color: var(--t2); cursor: pointer; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { color: var(--t1); border-color: var(--red); }
+.modal-content { padding: 8px; }
+
+.modal-ing-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px; }
+.modal-ing-icon { font-size: 3rem; }
+.modal-ing-info { flex: 1; }
+.modal-ing-name { font-family: var(--ff-head); font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+.modal-ing-inci { font-family: var(--ff-mono); font-size: 0.8rem; color: var(--t3); }
+.modal-ing-cas  { font-family: var(--ff-mono); font-size: 0.72rem; color: var(--t4); margin-top: 4px; }
+.modal-section { margin-bottom: 20px; }
+.modal-section-title {
+  font-family: var(--ff-mono); font-size: 0.65rem; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--t3); margin-bottom: 12px;
+}
+.modal-props { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.modal-prop {
+  padding: 12px; border-radius: var(--radius-sm);
+  background: var(--c-surface2); border: 1px solid var(--c-border);
+}
+.modal-prop-label { font-size: 0.65rem; color: var(--t3); font-family: var(--ff-mono); margin-bottom: 4px; }
+.modal-prop-val { font-size: 0.88rem; font-weight: 600; }
+.efficacy-bar-wrap { margin-bottom: 10px; }
+.efb-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--t2); margin-bottom: 5px; }
+.efb-track { height: 5px; background: var(--c-border); border-radius: 3px; overflow: hidden; }
+.efb-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green), var(--blue)); }
+.reg-status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.rst-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: var(--radius-sm); border: 1px solid var(--c-border);
+  background: var(--c-surface2);
+}
+.rst-flag { font-size: 1rem; }
+.rst-info { flex: 1; }
+.rst-country { font-size: 0.78rem; font-weight: 600; }
+.rst-status  { font-size: 0.65rem; font-family: var(--ff-mono); }
+.rst-status.pass { color: var(--green); }
+.rst-status.fail { color: var(--red); }
+
+/* ═══════════ TOAST ═══════════ */
+.toast-container {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.toast {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; border-radius: var(--radius-sm);
+  background: rgba(10,20,45,0.95); backdrop-filter: blur(20px);
+  border: 1px solid var(--c-border); min-width: 280px; max-width: 360px;
+  pointer-events: all;
+  animation: toastIn 0.3s ease forwards;
+}
+.toast.hide { animation: toastOut 0.3s ease forwards; }
+@keyframes toastIn  { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100px); opacity: 0; } }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-text { flex: 1; font-size: 0.82rem; line-height: 1.4; }
+.toast.success { border-color: rgba(0,255,178,0.3); }
+.toast.error   { border-color: rgba(255,77,109,0.3); }
+.toast.info    { border-color: rgba(0,194,255,0.3); }
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width: 1200px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .dash-grid { grid-template-columns: repeat(2, 1fr); }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 2; }
+  .results-grid { grid-template-columns: repeat(2, 1fr); }
+  .market-grid { grid-template-columns: repeat(2, 1fr); }
+  .analytics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { transform: translateX(-240px); width: 240px; }
+  .sidebar.open { transform: translateX(0); }
+  .topbar-mobile { display: flex; }
+  .content-topbar { display: none; }
+  .main-content { margin-left: 0; padding-top: 56px; }
+  .view { padding: 20px 16px; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .span-2, .span-3 { grid-column: span 1; }
+  .results-grid, .market-grid { grid-template-columns: 1fr; }
+  .analytics-grid { grid-template-columns: 1fr; }
+  .reg-layout { grid-template-columns: 1fr; }
+  .samples-layout { grid-template-columns: 1fr; }
+  .filter-grid { grid-template-columns: 1fr; }
+  .modal { width: 96%; }
+}
+@media (max-width: 600px) {
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .kpi-value { font-size: 1.5rem; }
+  .search-main-input { font-size: 0.9rem; }
+  .view-title { font-size: 1.4rem; }
+}
+
+/* ─── Overlay for mobile sidebar ─── */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0; z-index: 199;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(3px);
+}
+.sidebar-overlay.open { display: block; }
+</style>
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ CANVAS PARTICLES ══════════ -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- ══════════ CURSOR ══════════ -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ══════════ SIDEBAR NAV ══════════ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg width="36" height="36" viewBox="0 0 36 36">
+        <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+        <circle cx="18" cy="18" r="6" fill="url(#logoGrad)" opacity="0.8"/>
+        <defs>
+          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00FFB2"/>
+            <stop offset="100%" stop-color="#00C2FF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span class="logo-main">BioNexus</span>
+      <span class="logo-sub">AI Platform</span>
+    </div>
+  </div>
+
+  <div class="nav-section-label">메인</div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-view="dashboard">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">대시보드</span>
+      <span class="nav-badge">Live</span>
+    </li>
+    <li class="nav-item" data-view="search">
+      <span class="nav-icon">◉</span>
+      <span class="nav-label">AI 원료 검색</span>
+    </li>
+    <li class="nav-item" data-view="ingredients">
+      <span class="nav-icon">◎</span>
+      <span class="nav-label">원료 데이터베이스</span>
+    </li>
+    <li class="nav-item" data-view="regulatory">
+      <span class="nav-icon">◐</span>
+      <span class="nav-label">규제 필터</span>
+      <span class="nav-badge alert">!</span>
+    </li>
+  </ul>
+
+  <div class="nav-section-label">거래</div>
+  <ul class="nav-list">
+    <li class="nav-item" data-view="marketplace">
+      <span class="nav-icon">▣</span>
+      <span class="nav-label">마켓플레이스</span>
+    </li>
+    <li class="nav-item" data-view="samples">
+      <span class="nav-icon">▤</span>
+      <span class="nav-label">샘플 & 물류</span>
+    </li>
+    <li class="nav-item" data-view="analytics">
+      <span class="nav-icon">▦</span>
+      <span class="nav-label">트렌드 분석</span>
+    </li>
+  </ul>
+
+  <div class="sidebar-bottom">
+    <div class="user-card">
+      <div class="user-avatar">JK</div>
+      <div class="user-info">
+        <div class="user-name">김지현 Buyer</div>
+        <div class="user-plan">Pro Plan · USA</div>
+      </div>
+      <div class="user-status"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ MOBILE TOP BAR ══════════ -->
+<header class="topbar-mobile">
+  <button class="menu-btn" id="menuBtn">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="logo-text">
+    <span class="logo-main">BioNexus</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="icon-btn notif-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-dot"></span>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<main class="main-content" id="mainContent">
+
+  <!-- ────── TOP BAR ────── -->
+  <div class="content-topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb" id="breadcrumb">대시보드</div>
+      <div class="realtime-badge">
+        <span class="pulse-dot"></span>
+        실시간 연결
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-bar-mini">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="빠른 검색...">
+      </div>
+      <button class="icon-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <div class="user-avatar-sm">JK</div>
+    </div>
+  </div>
+
+  <!-- ════════ VIEWS ════════ -->
+
+  <!-- ─── DASHBOARD VIEW ─── -->
+  <div class="view active" id="view-dashboard">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">안녕하세요, 김지현님 <span class="wave">👋</span></h1>
+        <p class="view-subtitle">오늘의 K-Bio 원료 시장 현황과 AI 추천 소싱 기회를 확인하세요.</p>
+      </div>
+      <button class="btn-primary" onclick="switchView('search')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        AI 원료 검색
+      </button>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="kpi-row">
+      <div class="kpi-card kpi-green">
+        <div class="kpi-icon">🧬</div>
+        <div class="kpi-body">
+          <div class="kpi-label">등록 원료</div>
+          <div class="kpi-value" data-count="32480">0</div>
+          <div class="kpi-delta up">↑ +1,240 이번 달</div>
+        </div>
+        <svg class="kpi-spark" viewBox="0 0 80 30"><polyline points="0,25 15,20 30,22 45,12 60,15 80,5" fill="none" stroke="#00FFB2" stroke-width="2" opacity="0.6"/></svg>
+      </div>
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-icon">🌍</div>
+        <div class="kpi-body">
+          <div class="kpi-label">활성 바이어</div>
+          <div class="kpi-value" data-count="4820">0</div>
+          <div class="kpi-delta up">↑ +318 이번 주</div>
+        </div>
+        <svg class="kpi-spark" viewBox="0 0 80 30"><polyline points="0,28 15,24 30,18 45,20 60,10 80,8" fill="none" stroke="#00C2FF" stroke-width="2" opacity="0.6"/></svg>
+      </div>
+      <div class="kpi-card kpi-violet">
+        <div class="kpi-icon">💱</div>
+        <div class="kpi-body">
+          <div class="kpi-label">월 거래액</div>
+          <div class="kpi-value" data-prefix="₩" data-suffix="억" data-count="24">0</div>
+          <div class="kpi-delta up">↑ +18% MoM</div>
+        </div>
+        <svg class="kpi-spark" viewBox="0 0 80 30"><polyline points="0,26 15,22 30,24 45,15 60,12 80,6" fill="none" stroke="#A855F7" stroke-width="2" opacity="0.6"/></svg>
+      </div>
+      <div class="kpi-card kpi-gold">
+        <div class="kpi-icon">⚡</div>
+        <div class="kpi-body">
+          <div class="kpi-label">평균 소싱 기간</div>
+          <div class="kpi-value" data-suffix="H" data-count="68">0</div>
+          <div class="kpi-delta down">↓ 90일 → 2.8일</div>
+        </div>
+        <svg class="kpi-spark" viewBox="0 0 80 30"><polyline points="0,5 15,8 30,6 45,12 60,18 80,22" fill="none" stroke="#F59E0B" stroke-width="2" opacity="0.6"/></svg>
+      </div>
+    </div>
+
+    <!-- Middle Grid -->
+    <div class="dash-grid">
+
+      <!-- AI Recommendations -->
+      <div class="glass-card span-2" id="aiRecCard">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot green"></span>
+            AI 오늘의 추천 원료
+          </div>
+          <span class="card-meta">Efficacy Vector 기반 · 실시간 업데이트</span>
+        </div>
+        <div class="rec-list" id="recList">
+          <!-- JS generated -->
+        </div>
+      </div>
+
+      <!-- Regulatory Alerts -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot red"></span>
+            규제 변경 알림
+          </div>
+          <span class="badge-alert">3 New</span>
+        </div>
+        <div class="alert-list" id="alertList">
+          <!-- JS generated -->
+        </div>
+      </div>
+
+      <!-- Market Trend Chart -->
+      <div class="glass-card span-2">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot blue"></span>
+            글로벌 원료 수요 트렌드
+          </div>
+          <div class="chart-tabs">
+            <button class="chart-tab active" data-period="1m">1M</button>
+            <button class="chart-tab" data-period="3m">3M</button>
+            <button class="chart-tab" data-period="6m">6M</button>
+            <button class="chart-tab" data-period="1y">1Y</button>
+          </div>
+        </div>
+        <canvas id="trendChart" height="160"></canvas>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot violet"></span>
+            국가별 거래 현황
+          </div>
+        </div>
+        <div class="country-list" id="countryList">
+          <!-- JS generated -->
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="glass-card span-3">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot green"></span>
+            최근 거래 내역
+          </div>
+          <button class="btn-text">전체 보기 →</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="txTable">
+            <thead>
+              <tr>
+                <th>원료명</th>
+                <th>공급사</th>
+                <th>바이어 국가</th>
+                <th>거래액</th>
+                <th>규제 상태</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody id="txBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── AI SEARCH VIEW ─── -->
+  <div class="view" id="view-search">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">AI 원료 <span class="gradient-text">스마트 검색</span></h1>
+        <p class="view-subtitle">효능·규제·물류를 한번에. Efficacy Vector 매칭 엔진이 최적의 원료를 찾아드립니다.</p>
+      </div>
+    </div>
+
+    <!-- AI Search Interface -->
+    <div class="search-hero">
+      <div class="search-glow"></div>
+      <div class="search-main-wrap">
+        <div class="search-tags-row" id="searchTags">
+          <span class="stag active" data-q="주름 개선 안티에이징">🔬 주름 개선</span>
+          <span class="stag" data-q="피부 보습 히알루론산">💧 보습·수분</span>
+          <span class="stag" data-q="항산화 비타민">⚡ 항산화</span>
+          <span class="stag" data-q="항염 진정 천연">🌿 항염·진정</span>
+          <span class="stag" data-q="미백 브라이트닝">✨ 미백</span>
+          <span class="stag" data-q="콜라겐 탄력">🫧 탄력·콜라겐</span>
+        </div>
+        <div class="search-input-wrap" id="searchInputWrap">
+          <div class="search-ai-indicator">
+            <div class="ai-dot"></div>
+            AI
+          </div>
+          <input type="text" class="search-main-input" id="searchInput" 
+            placeholder="예: 주름 개선에 효과적인 FDA 승인 천연 원료 추천해줘">
+          <div class="search-filters-btn" id="searchFiltersBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            필터
+          </div>
+          <button class="search-submit-btn" id="searchBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel glass-card" id="filterPanel" style="display:none">
+          <div class="filter-grid">
+            <div class="filter-group">
+              <label class="filter-label">타겟 국가</label>
+              <div class="filter-chips" id="countryFilter">
+                <span class="fchip active" data-val="all">전체</span>
+                <span class="fchip" data-val="us">🇺🇸 미국</span>
+                <span class="fchip" data-val="eu">🇪🇺 유럽</span>
+                <span class="fchip" data-val="jp">🇯🇵 일본</span>
+                <span class="fchip" data-val="cn">🇨🇳 중국</span>
+                <span class="fchip" data-val="sea">🌏 동남아</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">원료 유형</label>
+              <div class="filter-chips">
+                <span class="fchip active" data-val="all">전체</span>
+                <span class="fchip" data-val="natural">천연</span>
+                <span class="fchip" data-val="bio">바이오</span>
+                <span class="fchip" data-val="synthetic">합성</span>
+                <span class="fchip" data-val="fermented">발효</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">EWG 등급</label>
+              <div class="filter-chips">
+                <span class="fchip active" data-val="all">전체</span>
+                <span class="fchip ewg-1" data-val="1">1등급</span>
+                <span class="fchip ewg-2" data-val="2">2등급</span>
+                <span class="fchip ewg-3" data-val="3">3등급</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">가격 범위 (kg당)</label>
+              <div class="price-range">
+                <input type="range" min="0" max="500" value="200" class="range-slider" id="priceRange">
+                <span class="range-val" id="priceVal">$0 ~ $200</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="search-results-area" id="searchResultsArea">
+      <div class="results-header">
+        <div class="results-count" id="resultsCount">인기 원료 <span>12개</span> 표시 중</div>
+        <div class="results-sort">
+          <select class="sort-select" id="sortSelect">
+            <option value="match">매칭 점수순</option>
+            <option value="price">가격순</option>
+            <option value="rating">평점순</option>
+            <option value="new">최신 등록순</option>
+          </select>
+        </div>
+      </div>
+      <div class="results-grid" id="resultsGrid">
+        <!-- JS generated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── REGULATORY VIEW ─── -->
+  <div class="view" id="view-regulatory">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">글로벌 <span class="gradient-text">규제 필터</span></h1>
+        <p class="view-subtitle">실시간 크롤링 기반 규제 DB. 국가 선택만 하면 통관 리스크 0%를 보장합니다.</p>
+      </div>
+    </div>
+
+    <div class="reg-layout">
+      <!-- Country Selector -->
+      <div class="glass-card reg-countries">
+        <div class="card-header">
+          <div class="card-title"><span class="card-title-dot blue"></span>국가 선택</div>
+          <span class="card-meta">클릭으로 규제 확인</span>
+        </div>
+        <div class="country-grid" id="regCountryGrid">
+          <!-- JS generated -->
+        </div>
+      </div>
+
+      <!-- Regulation Detail -->
+      <div class="glass-card reg-detail" id="regDetail">
+        <div class="reg-detail-inner" id="regDetailInner">
+          <div class="reg-placeholder">
+            <div class="reg-ph-icon">🌐</div>
+            <div class="reg-ph-text">좌측에서 국가를 선택하면<br>상세 규제 정보를 확인할 수 있습니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MARKETPLACE VIEW ─── -->
+  <div class="view" id="view-marketplace">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">K-Bio <span class="gradient-text">마켓플레이스</span></h1>
+        <p class="view-subtitle">검증된 국내 공급사의 프리미엄 원료. 에스크로 결제로 안전하게 거래하세요.</p>
+      </div>
+      <button class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        원료 등록
+      </button>
+    </div>
+
+    <div class="market-filters-row">
+      <div class="mfilter-tabs" id="marketTabs">
+        <button class="mfilter-tab active" data-cat="all">전체</button>
+        <button class="mfilter-tab" data-cat="cosmetic">화장품</button>
+        <button class="mfilter-tab" data-cat="food">건강기능식품</button>
+        <button class="mfilter-tab" data-cat="pharma">제약</button>
+        <button class="mfilter-tab" data-cat="fermented">발효</button>
+      </div>
+      <div class="mfilter-right">
+        <button class="view-toggle active" id="gridViewBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-toggle" id="listViewBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="market-grid" id="marketGrid">
+      <!-- JS generated -->
+    </div>
+  </div>
+
+  <!-- ─── SAMPLES VIEW ─── -->
+  <div class="view" id="view-samples">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">샘플 <span class="gradient-text">& 물류 트래킹</span></h1>
+        <p class="view-subtitle">원클릭 샘플 신청부터 실시간 배송 추적까지. 72시간 글로벌 특송.</p>
+      </div>
+    </div>
+
+    <div class="samples-layout">
+      <div class="samples-list-area">
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title"><span class="card-title-dot green"></span>진행 중인 샘플 요청</div>
+          </div>
+          <div class="sample-list" id="sampleList"></div>
+        </div>
+      </div>
+      <div class="samples-track-area">
+        <div class="glass-card">
+          <div class="card-header">
+            <div class="card-title"><span class="card-title-dot blue"></span>배송 추적</div>
+            <span class="card-meta">실시간 업데이트</span>
+          </div>
+          <div class="track-content" id="trackContent"></div>
+        </div>
+        <div class="glass-card" style="margin-top:20px">
+          <div class="card-header">
+            <div class="card-title"><span class="card-title-dot violet"></span>빠른 샘플 신청</div>
+          </div>
+          <div class="quick-sample-form" id="quickSampleForm">
+            <input type="text" class="form-input" placeholder="원료명 또는 CAS 번호 입력">
+            <input type="text" class="form-input" placeholder="필요 수량 (kg)">
+            <select class="form-input">
+              <option>배송 국가 선택</option>
+              <option>미국 (FDA Zone)</option>
+              <option>유럽 (CPNP Zone)</option>
+              <option>일본</option>
+              <option>동남아시아</option>
+            </select>
+            <button class="btn-primary full-width">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              샘플 요청 전송
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── ANALYTICS VIEW ─── -->
+  <div class="view" id="view-analytics">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">글로벌 <span class="gradient-text">트렌드 분석</span></h1>
+        <p class="view-subtitle">실시간 K-Bio 원료 시장 인사이트. 데이터 기반 소싱 의사결정을 지원합니다.</p>
+      </div>
+      <button class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        리포트 다운로드
+      </button>
+    </div>
+
+    <div class="analytics-grid">
+      <div class="glass-card span-2">
+        <div class="card-header">
+          <div class="card-title"><span class="card-title-dot green"></span>카테고리별 수요 변화</div>
+          <span class="card-meta">최근 12개월</span>
+        </div>
+        <canvas id="analyticsChart1" height="200"></canvas>
+      </div>
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title"><span class="card-title-dot blue"></span>국가별 시장 점유율</div>
+        </div>
+        <canvas id="analyticsChart2" height="200"></canvas>
+      </div>
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title"><span class="card-title-dot violet"></span>급상승 원료 Top 5</div>
+          <span class="badge-new">HOT</span>
+        </div>
+        <div class="trending-list" id="trendingList"></div>
+      </div>
+      <div class="glass-card span-2">
+        <div class="card-header">
+          <div class="card-title"><span class="card-title-dot gold"></span>가격 지수 변동</div>
+        </div>
+        <canvas id="analyticsChart3" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── INGREDIENTS VIEW ─── -->
+  <div class="view" id="view-ingredients">
+    <div class="view-header">
+      <div>
+        <h1 class="view-title">원료 <span class="gradient-text">데이터베이스</span></h1>
+        <p class="view-subtitle">3만 건 이상의 K-Bio 원료 데이터. 화학 구조·임상 데이터·규제 정보를 한번에.</p>
+      </div>
+    </div>
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="card-title"><span class="card-title-dot green"></span>전체 원료 목록</div>
+        <div class="search-bar-mini">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="원료명, CAS번호 검색..." id="dbSearch">
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>원료명 (국문)</th>
+              <th>INCI Name</th>
+              <th>CAS No.</th>
+              <th>효능 카테고리</th>
+              <th>EWG</th>
+              <th>FDA</th>
+              <th>CPNP</th>
+              <th>매칭 점수</th>
+            </tr>
+          </thead>
+          <tbody id="dbTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════ INGREDIENT DETAIL MODAL ══════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal glass-card" id="ingredientModal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   BioNexus AI — App Logic
+   ══════════════════════════════════════════ */
+
+'use strict';
+
+// ═══════════════════════════════════════════
+// DATA LAYER
+// ═══════════════════════════════════════════
+
+const DATA = {
+  ingredients: [
+    { id:1, name:'아데노신', inci:'Adenosine', cas:'58-61-7', icon:'🧬', cat:'cosmetic', effects:['주름 개선','피부 탄력'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:180, unit:'kg', score:98.4, efficacy:{wrinkle:95,moisture:60,brightening:30,antioxidant:50}, supplier:'㈜한국생명과학', desc:'세포 수준의 주름 개선 효과. FDA·KFDA 인증 기능성 성분. 히알루론산과 시너지 효과 극대화.' },
+    { id:2, name:'병풀 추출물', inci:'Centella Asiatica Extract', cas:'84696-21-9', icon:'🌿', cat:'cosmetic', effects:['항염','진정','재생'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:95, unit:'kg', score:95.1, efficacy:{wrinkle:70,moisture:75,brightening:40,antioxidant:80}, supplier:'나이아드코리아', desc:'피부 장벽 강화 및 항염 효과. 아시아티코사이드 함유. K-뷰티 핵심 원료.' },
+    { id:3, name:'히알루론산 (1kDa)', inci:'Sodium Hyaluronate', cas:'9067-32-7', icon:'💧', cat:'cosmetic', effects:['보습','피부 침투','볼륨'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:240, unit:'kg', score:91.8, efficacy:{wrinkle:60,moisture:99,brightening:20,antioxidant:30}, supplier:'㈜이노바텍', desc:'분자량 1kDa 저분자 히알루론산. 피부 깊숙이 침투하는 최적 분자량. 임상 보습력 +320%.' },
+    { id:4, name:'나이아신아미드', inci:'Niacinamide', cas:'98-92-0', icon:'✨', cat:'cosmetic', effects:['미백','모공','기름기 조절'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:65, unit:'kg', score:96.2, efficacy:{wrinkle:50,moisture:55,brightening:92,antioxidant:60}, supplier:'바이오스페어코리아', desc:'5% 농도에서 멜라닌 생성 억제 임상 증명. 모공 축소 효과. 피부 밝기 +40%.' },
+    { id:5, name:'발효 갈락토미세스', inci:'Galactomyces Ferment Filtrate', cas:'—', icon:'🔬', cat:'fermented', effects:['피부 광채','pH 조절','항산화'], ewg:2, fda:true, eu:true, kfda:true, jp:true, price:320, unit:'L', score:88.7, efficacy:{wrinkle:65,moisture:80,brightening:85,antioxidant:70}, supplier:'발효연구소(주)', desc:'발효 기술 기반 고농도 필트레이트. 피부 마이크로바이옴 균형 유지. 일본 SK-II 원형 성분.' },
+    { id:6, name:'레스베라트롤', inci:'Resveratrol', cas:'501-36-0', icon:'🍇', cat:'cosmetic', effects:['항산화','항노화','항염'], ewg:1, fda:true, eu:true, kfda:false, jp:true, price:580, unit:'kg', score:84.3, efficacy:{wrinkle:80,moisture:45,brightening:55,antioxidant:98}, supplier:'㈜그린바이오', desc:'강력한 항산화·항노화 성분. 포도 껍질 유래 천연 폴리페놀. 세포 수명 연장 임상 연구.' },
+    { id:7, name:'에피갈로카테킨갈레이트', inci:'Epigallocatechin Gallate', cas:'989-51-5', icon:'🍵', cat:'cosmetic', effects:['항산화','항균','항염'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:450, unit:'kg', score:86.1, efficacy:{wrinkle:70,moisture:50,brightening:65,antioxidant:95}, supplier:'녹차원바이오', desc:'녹차 유래 강력 항산화 성분 EGCG. 항암·항균 효과 다수 임상 논문. 면역력 증진 효과.' },
+    { id:8, name:'판테놀(비타민B5)', inci:'Panthenol', cas:'81-13-0', icon:'💊', cat:'cosmetic', effects:['보습','피부 재생','윤기'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:42, unit:'kg', score:93.5, efficacy:{wrinkle:45,moisture:90,brightening:30,antioxidant:40}, supplier:'씨제이올리브영', desc:'프로비타민 B5. 피부 수분 보유 능력 증가. 상처 치유 및 피부 재생 효과 임상 증명.' },
+    { id:9, name:'바쿠치올', inci:'Bakuchiol', cas:'10309-37-2', icon:'🌱', cat:'natural', effects:['주름 개선','항산화','레티놀 대체'], ewg:1, fda:true, eu:true, kfda:false, jp:false, price:890, unit:'kg', score:82.6, efficacy:{wrinkle:85,moisture:60,brightening:70,antioxidant:75}, supplier:'자연에서㈜', desc:'천연 레티놀 대체 성분. 임신부도 사용 가능. Psoralea corylifolia 씨앗 추출. 레티놀 동등 효과.' },
+    { id:10, name:'아스타잔틴', inci:'Astaxanthin', cas:'472-61-7', icon:'🦐', cat:'food', effects:['항산화','항노화','눈 건강'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:1200, unit:'kg', score:79.4, efficacy:{wrinkle:75,moisture:40,brightening:50,antioxidant:100}, supplier:'해양바이오㈜', desc:'세계 최강 항산화 성분. 베타카로틴의 54배. 헤마토코쿠스 미세조류 유래. 시력·피부·운동 능력 향상.' },
+    { id:11, name:'세라마이드 NP', inci:'Ceramide NP', cas:'100403-19-8', icon:'🛡️', cat:'cosmetic', effects:['피부 장벽','보습','민감성 개선'], ewg:1, fda:true, eu:true, kfda:true, jp:true, price:760, unit:'kg', score:90.2, efficacy:{wrinkle:55,moisture:88,brightening:25,antioxidant:35}, supplier:'㈜더모텍', desc:'피부 장벽 구성 핵심 성분. 아토피·건성 피부 임상 효과 증명. 일반 세라마이드 대비 피부 친화성 3배.' },
+    { id:12, name:'리포익산', inci:'Alpha Lipoic Acid', cas:'1077-28-7', icon:'⚡', cat:'cosmetic', effects:['항산화','피부 탄력','모공 최소화'], ewg:1, fda:true, eu:true, kfda:false, jp:true, price:320, unit:'kg', score:81.9, efficacy:{wrinkle:78,moisture:48,brightening:60,antioxidant:90}, supplier:'알파바이오㈜', desc:'수용성·지용성 모두 작용하는 만능 항산화제. 비타민 C·E 재생 효과. 당화 방지로 항노화 시너지.' },
+  ],
+
+  countries: [
+    { code:'us', flag:'🇺🇸', name:'미국', agency:'FDA', status:'ok', banned:247, restricted:580, approvedKBio:1240, complexity:'중간', lastUpdate:'2025-02-20' },
+    { code:'eu', flag:'🇪🇺', name:'유럽연합', agency:'CPNP/SCCS', status:'warn', banned:1328, restricted:890, approvedKBio:980, complexity:'높음', lastUpdate:'2025-02-15' },
+    { code:'jp', flag:'🇯🇵', name:'일본', agency:'PMDA/MHL', status:'ok', banned:68, restricted:220, approvedKBio:1560, complexity:'낮음', lastUpdate:'2025-02-18' },
+    { code:'cn', flag:'🇨🇳', name:'중국', agency:'NMPA', status:'warn', banned:1265, restricted:3000, approvedKBio:720, complexity:'매우 높음', lastUpdate:'2025-01-30' },
+    { code:'kr', flag:'🇰🇷', name:'한국', agency:'MFDS', status:'ok', banned:54, restricted:180, approvedKBio:3200, complexity:'낮음', lastUpdate:'2025-02-22' },
+    { code:'sg', flag:'🇸🇬', name:'싱가포르', agency:'HSA', status:'ok', banned:120, restricted:340, approvedKBio:890, complexity:'낮음', lastUpdate:'2025-02-10' },
+    { code:'au', flag:'🇦🇺', name:'호주', agency:'TGA', status:'ok', banned:180, restricted:420, approvedKBio:760, complexity:'중간', lastUpdate:'2025-02-05' },
+    { code:'ca', flag:'🇨🇦', name:'캐나다', agency:'Health Canada', status:'ok', banned:340, restricted:610, approvedKBio:1080, complexity:'중간', lastUpdate:'2025-02-12' },
+  ],
+
+  alerts: [
+    { type:'danger', country:'🇪🇺 EU', text:'CPNP: 살리실산 농도 제한 0.5% → 0.3% 하향 조정', date:'2025-02-28', ingredient:'살리실산' },
+    { type:'danger', country:'🇨🇳 중국', text:'NMPA: 히알루론산 원료 추가 임상 증명 요구', date:'2025-02-25', ingredient:'히알루론산' },
+    { type:'warn',   country:'🇺🇸 미국', text:'FDA: 레티놀 제품 라벨링 규정 강화 예정 (Q3 2025)', date:'2025-02-20', ingredient:'레티놀' },
+  ],
+
+  transactions: [
+    { ing:'아데노신 99%', supplier:'한국생명과학㈜', buyer:'🇺🇸', amount:'$12,400', regStatus:'✅ FDA 통과', status:'completed' },
+    { ing:'병풀 추출물 50%', supplier:'나이아드코리아', buyer:'🇩🇪', amount:'€8,200', regStatus:'✅ CPNP 통과', status:'completed' },
+    { ing:'나이아신아미드', supplier:'바이오스페어코리아', buyer:'🇯🇵', amount:'¥980,000', regStatus:'✅ PMDA 통과', status:'processing' },
+    { ing:'발효 갈락토미세스', supplier:'발효연구소㈜', buyer:'🇨🇳', amount:'¥45,000', regStatus:'⚠️ NMPA 검토 중', status:'review' },
+    { ing:'히알루론산 1kDa', supplier:'㈜이노바텍', buyer:'🇦🇺', amount:'A$6,800', regStatus:'✅ TGA 통과', status:'processing' },
+    { ing:'세라마이드 NP', supplier:'㈜더모텍', buyer:'🇸🇬', amount:'S$3,200', regStatus:'✅ HSA 통과', status:'pending' },
+  ],
+
+  countryStats: [
+    { flag:'🇺🇸', name:'미국', pct:34, bar:100 },
+    { flag:'🇯🇵', name:'일본', pct:22, bar:65 },
+    { flag:'🇩🇪', name:'독일', pct:15, bar:44 },
+    { flag:'🇨🇳', name:'중국', pct:12, bar:35 },
+    { flag:'🇸🇬', name:'싱가포르', pct:9, bar:26 },
+    { flag:'🇦🇺', name:'호주', pct:8, bar:24 },
+  ],
+
+  samples: [
+    { id:'SMP-2025-0041', name:'아데노신 (1kg)', progress:85, from:'인천 창고', to:'Los Angeles, USA', eta:'2025-03-06', status:'배송 중' },
+    { id:'SMP-2025-0040', name:'나이아신아미드 (500g)', progress:100, from:'부산 창고', to:'Hamburg, Germany', eta:'2025-03-04', status:'배송 완료' },
+    { id:'SMP-2025-0039', name:'병풀 추출물 (2kg)', progress:40, from:'수원 공장', to:'Singapore', eta:'2025-03-08', status:'통관 중' },
+  ],
+
+  trackSteps: [
+    { title:'주문 접수', desc:'에스크로 결제 완료', time:'03.03 09:12', done:true },
+    { title:'품질 검수 (SGS)', desc:'성분 분석 리포트 확인', time:'03.03 14:30', done:true },
+    { title:'포장 및 출고', desc:'인천 창고 출발', time:'03.04 08:45', done:true },
+    { title:'항공 운송', desc:'KE 화물편 탑재 완료', time:'03.04 23:10', active:true },
+    { title:'LA 도착 및 통관', desc:'FDA 서류 자동 제출', time:'예정 03.05', pending:true },
+    { title:'최종 배송', desc:'수령인 도착', time:'예정 03.06', pending:true },
+  ],
+
+  trending: [
+    { rank:1, name:'바쿠치올', cat:'천연 레티놀 대체', change:'+142%' },
+    { rank:2, name:'β-글루칸', cat:'면역·보습', change:'+98%' },
+    { rank:3, name:'스쿠알란 (사탕수수)', cat:'친환경 보습', change:'+76%' },
+    { rank:4, name:'아스타잔틴', cat:'항산화·항노화', change:'+64%' },
+    { rank:5, name:'발효 갈락토미세스', cat:'K-뷰티 핵심', change:'+58%' },
+  ],
+};
+
+// ═══════════════════════════════════════════
+// CANVAS PARTICLE SYSTEM
+// ═══════════════════════════════════════════
+
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let animFrame;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function createParticle() {
+  return {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    r: Math.random() * 1.5 + 0.3,
+    alpha: Math.random() * 0.4 + 0.05,
+    color: Math.random() > 0.6 ? '#00FFB2' : Math.random() > 0.5 ? '#00C2FF' : '#A855F7',
+  };
+}
+
+function initParticles() {
+  particles = [];
+  const count = Math.min(80, Math.floor(canvas.width * canvas.height / 12000));
+  for (let i = 0; i < count; i++) particles.push(createParticle());
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach((p, i) => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+    // Connect nearby
+    particles.forEach((p2, j) => {
+      if (j <= i) return;
+      const dx = p.x - p2.x, dy = p.y - p2.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = `rgba(0,255,178,${0.04 * (1 - dist/100)})`;
+        ctx.stroke();
+      }
+    });
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.alpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+  animFrame = requestAnimationFrame(drawParticles);
+}
+
+resizeCanvas(); initParticles(); drawParticles();
+window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+
+// ═══════════════════════════════════════════
+// CUSTOM CURSOR
+// ═══════════════════════════════════════════
+const cursorDot  = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+let cursorX = 0, cursorY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  cursorX = e.clientX; cursorY = e.clientY;
+  cursorDot.style.left  = cursorX + 'px';
+  cursorDot.style.top   = cursorY + 'px';
+});
+function animRing() {
+  ringX += (cursorX - ringX) * 0.12;
+  ringY += (cursorY - ringY) * 0.12;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top  = ringY + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a, button, .nav-item, .rec-item, .ing-card, .market-card, .reg-country-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorRing.classList.add('expanded'));
+  el.addEventListener('mouseleave', () => cursorRing.classList.remove('expanded'));
+});
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+const viewNames = { dashboard:'대시보드', search:'AI 원료 검색', ingredients:'원료 데이터베이스', regulatory:'규제 필터', marketplace:'마켓플레이스', samples:'샘플 & 물류', analytics:'트렌드 분석' };
+
+function switchView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const view = document.getElementById('view-' + viewId);
+  if (view) view.classList.add('active');
+  const navItem = document.querySelector(`[data-view="${viewId}"]`);
+  if (navItem) navItem.classList.add('active');
+  document.getElementById('breadcrumb').textContent = viewNames[viewId] || viewId;
+  // Init view
+  if (viewId === 'analytics') initAnalyticsCharts();
+  // Mobile: close sidebar
+  closeSidebar();
+}
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => switchView(item.dataset.view));
+});
+
+// Mobile sidebar
+const sidebar = document.getElementById('sidebar');
+const menuBtn = document.getElementById('menuBtn');
+let overlay = document.createElement('div');
+overlay.className = 'sidebar-overlay';
+document.body.appendChild(overlay);
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+
+// ═══════════════════════════════════════════
+// COUNTER ANIMATION
+// ═══════════════════════════════════════════
+function animateCounters() {
+  document.querySelectorAll('.kpi-value[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    let current = 0;
+    const increment = target / 60;
+    const timer = setInterval(() => {
+      current = Math.min(current + increment, target);
+      el.textContent = prefix + Math.floor(current).toLocaleString() + suffix;
+      if (current >= target) clearInterval(timer);
+    }, 16);
+  });
+}
+
+// ═══════════════════════════════════════════
+// TOAST NOTIFICATIONS
+// ═══════════════════════════════════════════
+function showToast(msg, type='info', icon='💡') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-text">${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD RENDER
+// ═══════════════════════════════════════════
+function renderDashboard() {
+  // AI Recommendations
+  const recList = document.getElementById('recList');
+  const topIngs = [...DATA.ingredients].sort((a,b) => b.score - a.score).slice(0, 5);
+  recList.innerHTML = topIngs.map((ing, i) => `
+    <div class="rec-item" onclick="openModal(${ing.id})">
+      <div class="rec-rank">${i+1}</div>
+      <div class="rec-info">
+        <div class="rec-name">${ing.icon} ${ing.name}</div>
+        <div class="rec-sub">${ing.effects.join(' · ')}</div>
+      </div>
+      <div class="rec-right">
+        <div class="rec-score">${ing.score}%</div>
+        <div class="reg-chips">
+          ${ing.fda ? '<span class="reg-chip rc-fda">FDA</span>' : ''}
+          ${ing.eu  ? '<span class="reg-chip rc-eu">EU</span>' : ''}
+          ${ing.kfda? '<span class="reg-chip rc-kfda">KFDA</span>' : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Alerts
+  const alertList = document.getElementById('alertList');
+  alertList.innerHTML = DATA.alerts.map(a => `
+    <div class="alert-item ${a.type === 'warn' ? 'warn' : ''}">
+      <div class="alert-country">${a.country}</div>
+      <div class="alert-text">${a.text}</div>
+      <div class="alert-date">${a.date}</div>
+    </div>
+  `).join('');
+
+  // Country Stats
+  const countryList = document.getElementById('countryList');
+  countryList.innerHTML = DATA.countryStats.map(c => `
+    <div class="country-item">
+      <span class="country-flag">${c.flag}</span>
+      <span class="country-name">${c.name}</span>
+      <div class="country-bar-track"><div class="country-bar-fill" style="width:${c.bar}%"></div></div>
+      <span class="country-pct">${c.pct}%</span>
+    </div>
+  `).join('');
+
+  // Transactions
+  const txBody = document.getElementById('txBody');
+  const statusMap = { completed:'sb-completed', processing:'sb-processing', pending:'sb-pending', review:'sb-review' };
+  const statusLabel = { completed:'완료', processing:'처리 중', pending:'대기', review:'검토 중' };
+  txBody.innerHTML = DATA.transactions.map(tx => `
+    <tr>
+      <td>${tx.ing}</td>
+      <td>${tx.supplier}</td>
+      <td style="font-size:1.2rem">${tx.buyer}</td>
+      <td style="font-family:var(--ff-mono); color:var(--green)">${tx.amount}</td>
+      <td style="font-size:0.78rem; color:var(--t2)">${tx.regStatus}</td>
+      <td><span class="status-badge ${statusMap[tx.status]}">${statusLabel[tx.status]}</span></td>
+    </tr>
+  `).join('');
+
+  // Trend Chart
+  renderTrendChart();
+}
+
+// ═══════════════════════════════════════════
+// CHARTS (inline canvas, no external lib)
+// ═══════════════════════════════════════════
+function renderTrendChart() {
+  const canvas = document.getElementById('trendChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 500;
+  canvas.width = W; canvas.height = 160;
+  const H = 160;
+
+  const datasets = [
+    { label:'K-뷰티 원료', color:'#00FFB2', data:[42,48,45,52,58,65,62,70,78,82,88,95] },
+    { label:'건기식 원료', color:'#00C2FF', data:[30,32,35,38,36,40,45,48,52,55,60,68] },
+    { label:'발효 원료',   color:'#A855F7', data:[15,18,22,20,25,28,30,35,38,42,48,55] },
+  ];
+
+  const pad = { t:20, r:20, b:30, l:50 };
+  const cW = W - pad.l - pad.r;
+  const cH = H - pad.t - pad.b;
+  const maxVal = 100;
+  const months = ['3월','4월','5월','6월','7월','8월','9월','10월','11월','12월','1월','2월'];
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (cH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = 'rgba(237,244,255,0.25)'; ctx.font = '10px JetBrains Mono,monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(maxVal - (maxVal/4)*i), pad.l - 6, y + 4);
+  }
+
+  // X labels
+  ctx.fillStyle = 'rgba(237,244,255,0.25)'; ctx.textAlign = 'center'; ctx.font = '10px JetBrains Mono,monospace';
+  months.forEach((m, i) => {
+    const x = pad.l + (cW / (months.length - 1)) * i;
+    ctx.fillText(m, x, H - 8);
+  });
+
+  // Lines + Area
+  datasets.forEach(ds => {
+    const pts = ds.data.map((v, i) => ({
+      x: pad.l + (cW / (ds.data.length - 1)) * i,
+      y: pad.t + cH - (v / maxVal) * cH,
+    }));
+
+    // Area fill
+    const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+    grad.addColorStop(0, ds.color + '25');
+    grad.addColorStop(1, ds.color + '00');
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, H - pad.b);
+    pts.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.lineTo(pts[pts.length-1].x, H - pad.b);
+    ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+    ctx.strokeStyle = ds.color; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+
+    // Dots on last point
+    const last = pts[pts.length-1];
+    ctx.beginPath(); ctx.arc(last.x, last.y, 4, 0, Math.PI*2);
+    ctx.fillStyle = ds.color; ctx.fill();
+  });
+}
+
+// ═══════════════════════════════════════════
+// SEARCH VIEW
+// ═══════════════════════════════════════════
+function renderSearchResults(query = '', filters = {}) {
+  const grid = document.getElementById('resultsGrid');
+  const countEl = document.getElementById('resultsCount');
+  let results = [...DATA.ingredients];
+
+  // Filter by query
+  if (query) {
+    const q = query.toLowerCase();
+    results = results.filter(ing =>
+      ing.name.toLowerCase().includes(q) ||
+      ing.inci.toLowerCase().includes(q) ||
+      ing.effects.some(e => e.toLowerCase().includes(q)) ||
+      ing.desc.toLowerCase().includes(q)
+    );
+    // Score boost based on keyword
+    results = results.map(ing => {
+      let boost = 0;
+      if (q.includes('주름') && ing.effects.includes('주름 개선')) boost = 5;
+      if (q.includes('보습') && ing.effects.some(e => e.includes('보습'))) boost = 5;
+      if (q.includes('미백') && ing.effects.includes('미백')) boost = 5;
+      if (q.includes('항산화') && ing.effects.some(e => e.includes('항산화'))) boost = 5;
+      return { ...ing, score: Math.min(ing.score + boost, 100) };
+    });
+  }
+
+  // Sort
+  const sortVal = document.getElementById('sortSelect')?.value || 'match';
+  if (sortVal === 'match') results.sort((a,b) => b.score - a.score);
+  else if (sortVal === 'price') results.sort((a,b) => a.price - b.price);
+  else if (sortVal === 'rating') results.sort((a,b) => b.score - a.score);
+  else results.sort((a,b) => b.id - a.id);
+
+  countEl.innerHTML = `검색 결과 <span>${results.length}개</span> 원료`;
+  grid.innerHTML = results.map(ing => `
+    <div class="ing-card" onclick="openModal(${ing.id})">
+      <div class="ing-card-top">
+        <div class="ing-icon">${ing.icon}</div>
+        <div class="ing-match-score">${ing.score.toFixed(1)}%</div>
+      </div>
+      <div class="ing-name">${ing.name}</div>
+      <div class="ing-inci">${ing.inci}</div>
+      <div class="ing-effects">
+        ${ing.effects.map(e => `<span class="effect-tag">${e}</span>`).join('')}
+      </div>
+      <div class="ing-card-footer">
+        <div class="ing-price">$<span>${ing.price}</span>/${ing.unit}</div>
+        <div class="ing-regs">
+          ${ing.fda  ? '<span class="reg-chip rc-fda">FDA</span>' : ''}
+          ${ing.eu   ? '<span class="reg-chip rc-eu">EU</span>'  : ''}
+          ${ing.kfda ? '<span class="reg-chip rc-kfda">KFDA</span>' : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Search events
+const searchInput = document.getElementById('searchInput');
+const searchBtn   = document.getElementById('searchBtn');
+
+function doSearch() {
+  const q = searchInput.value.trim();
+  renderSearchResults(q);
+  if (q) showToast(`"${q}" 검색 완료 — AI 매칭 점수 적용됨`, 'success', '🧬');
+}
+
+searchBtn.addEventListener('click', doSearch);
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+// Search tags
+document.getElementById('searchTags').addEventListener('click', e => {
+  const stag = e.target.closest('.stag');
+  if (!stag) return;
+  document.querySelectorAll('.stag').forEach(s => s.classList.remove('active'));
+  stag.classList.add('active');
+  searchInput.value = stag.dataset.q;
+  doSearch();
+});
+
+// Filter toggle
+document.getElementById('searchFiltersBtn').addEventListener('click', () => {
+  const fp = document.getElementById('filterPanel');
+  fp.style.display = fp.style.display === 'none' ? 'block' : 'none';
+  showToast('필터 패널 ' + (fp.style.display === 'none' ? '닫힘' : '열림'), 'info', '🔧');
+});
+
+// Filter chips
+document.querySelectorAll('.filter-chips').forEach(group => {
+  group.addEventListener('click', e => {
+    const chip = e.target.closest('.fchip');
+    if (!chip) return;
+    group.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+
+// Price range
+const priceRange = document.getElementById('priceRange');
+const priceVal   = document.getElementById('priceVal');
+if (priceRange) {
+  priceRange.addEventListener('input', () => {
+    priceVal.textContent = `$0 ~ $${priceRange.value}`;
+  });
+}
+
+// Sort
+document.getElementById('sortSelect')?.addEventListener('change', () => {
+  renderSearchResults(searchInput.value.trim());
+});
+
+// ═══════════════════════════════════════════
+// INGREDIENT DETAIL MODAL
+// ═══════════════════════════════════════════
+function openModal(id) {
+  const ing = DATA.ingredients.find(i => i.id === id);
+  if (!ing) return;
+
+  const content = document.getElementById('modalContent');
+  content.innerHTML = `
+    <div class="modal-ing-header">
+      <div class="modal-ing-icon">${ing.icon}</div>
+      <div class="modal-ing-info">
+        <div class="modal-ing-name">${ing.name}</div>
+        <div class="modal-ing-inci">${ing.inci}</div>
+        <div class="modal-ing-cas">CAS: ${ing.cas}</div>
+      </div>
+      <div style="margin-left:auto; text-align:right">
+        <div style="font-family:var(--ff-mono); font-size:0.65rem; color:var(--t3); margin-bottom:4px">AI 매칭 점수</div>
+        <div style="font-family:var(--ff-head); font-size:2rem; font-weight:800; color:var(--green)">${ing.score}%</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">// 기본 정보</div>
+      <div class="modal-props">
+        <div class="modal-prop">
+          <div class="modal-prop-label">EWG 안전 등급</div>
+          <div class="modal-prop-val" style="color:var(--green)">Grade ${ing.ewg} (안전)</div>
+        </div>
+        <div class="modal-prop">
+          <div class="modal-prop-label">카테고리</div>
+          <div class="modal-prop-val">${ing.cat === 'cosmetic' ? '화장품 원료' : ing.cat === 'fermented' ? '발효 원료' : ing.cat === 'food' ? '건기식 원료' : '천연 원료'}</div>
+        </div>
+        <div class="modal-prop">
+          <div class="modal-prop-label">가격 (kg당)</div>
+          <div class="modal-prop-val" style="color:var(--green)">$${ing.price} / ${ing.unit}</div>
+        </div>
+        <div class="modal-prop">
+          <div class="modal-prop-label">공급사</div>
+          <div class="modal-prop-val">${ing.supplier}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">// 효능 데이터 (임상 기반)</div>
+      ${Object.entries({ wrinkle:'주름 개선', moisture:'보습·수분', brightening:'미백·광채', antioxidant:'항산화' })
+        .map(([key, label]) => `
+          <div class="efficacy-bar-wrap">
+            <div class="efb-label"><span>${label}</span><span style="color:var(--green); font-family:var(--ff-mono)">${ing.efficacy[key]}%</span></div>
+            <div class="efb-track"><div class="efb-fill" style="width:${ing.efficacy[key]}%; transition: width 1s ease;"></div></div>
+          </div>
+        `).join('')}
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">// 규제 적합성</div>
+      <div class="reg-status-grid">
+        <div class="rst-item">
+          <span class="rst-flag">🇺🇸</span>
+          <div class="rst-info">
+            <div class="rst-country">FDA (미국)</div>
+            <div class="rst-status ${ing.fda ? 'pass' : 'fail'}">${ing.fda ? '✅ 승인' : '❌ 미승인'}</div>
+          </div>
+        </div>
+        <div class="rst-item">
+          <span class="rst-flag">🇪🇺</span>
+          <div class="rst-info">
+            <div class="rst-country">CPNP (유럽)</div>
+            <div class="rst-status ${ing.eu ? 'pass' : 'fail'}">${ing.eu ? '✅ 승인' : '❌ 미승인'}</div>
+          </div>
+        </div>
+        <div class="rst-item">
+          <span class="rst-flag">🇰🇷</span>
+          <div class="rst-info">
+            <div class="rst-country">MFDS (한국)</div>
+            <div class="rst-status ${ing.kfda ? 'pass' : 'fail'}">${ing.kfda ? '✅ 승인' : '❌ 미승인'}</div>
+          </div>
+        </div>
+        <div class="rst-item">
+          <span class="rst-flag">🇯🇵</span>
+          <div class="rst-info">
+            <div class="rst-country">PMDA (일본)</div>
+            <div class="rst-status ${ing.jp ? 'pass' : 'fail'}">${ing.jp ? '✅ 승인' : '⚠️ 검토 중'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">// 성분 설명</div>
+      <div style="font-size:0.88rem; color:var(--t2); line-height:1.8; padding:14px; background:var(--c-surface2); border-radius:var(--radius-sm); border:1px solid var(--c-border)">${ing.desc}</div>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:8px">
+      <button class="btn-primary" style="flex:1" onclick="requestSample(${ing.id})">
+        📦 샘플 요청
+      </button>
+      <button class="btn-outline" style="flex:1" onclick="showToast('장바구니에 추가되었습니다.','success','🛒')">
+        🛒 장바구니
+      </button>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+
+  // Animate efficacy bars after open
+  setTimeout(() => {
+    document.querySelectorAll('.efb-fill').forEach(bar => {
+      const w = bar.style.width; bar.style.width = '0';
+      setTimeout(() => bar.style.width = w, 50);
+    });
+  }, 100);
+}
+
+function requestSample(id) {
+  const ing = DATA.ingredients.find(i => i.id === id);
+  closeModal();
+  switchView('samples');
+  showToast(`${ing.name} 샘플 요청이 접수되었습니다. 72시간 내 배송 예정.`, 'success', '🚀');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+
+// ═══════════════════════════════════════════
+// REGULATORY VIEW
+// ═══════════════════════════════════════════
+function renderRegulatory() {
+  const grid = document.getElementById('regCountryGrid');
+  grid.innerHTML = DATA.countries.map(c => `
+    <div class="reg-country-btn" data-code="${c.code}" onclick="showRegDetail('${c.code}')">
+      <span class="rcb-flag">${c.flag}</span>
+      <div class="rcb-name">${c.name}</div>
+      <div class="rcb-status ${c.status}"></div>
+    </div>
+  `).join('');
+}
+
+function showRegDetail(code) {
+  const c = DATA.countries.find(c => c.code === code);
+  if (!c) return;
+
+  document.querySelectorAll('.reg-country-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-code="${code}"]`)?.classList.add('active');
+
+  const detail = document.getElementById('regDetailInner');
+  const restrictionsData = {
+    us: ['납(Lead) 10ppm 초과 금지','파라벤 일부 용도 제한','소아용 제품 특별 규제'],
+    eu: ['1328개 성분 금지','납·수은 등 중금속 엄격 제한','나노 소재 별도 신고 의무','레티놀 0.05% 농도 제한'],
+    jp: ['기능성 화장품 별도 신청','한방 성분 특별 허가 필요','광고 효능 표현 규제'],
+    cn: ['동물 실험 필수 요건 일부 유지','NMPA 사전 등록 필수','위생 허가 2년 이상 소요'],
+    kr: ['기능성 화장품 심사 필수','식약처 원료 안전성 자료 제출','수입 원료 국내 유통 허가'],
+    sg: ['비교적 완화된 규제','HSA 통보(Notification) 방식','금지 원료 목록 준수'],
+    au: ['TGA 치료제 수준 성분 별도 허가','호주 전용 마케팅 표현 규제'],
+    ca: ['INCI 표기 필수','자연 성분 강조 광고 규제','Health Canada 허가 리스트 준수'],
+  };
+
+  const restrictions = restrictionsData[code] || ['해당 국가 상세 데이터 로딩 중...'];
+  detail.innerHTML = `
+    <div class="reg-country-header">
+      <div class="reg-c-flag">${c.flag}</div>
+      <div class="reg-c-info">
+        <div class="reg-c-name">${c.name}</div>
+        <div class="reg-c-agency">${c.agency}</div>
+      </div>
+      <div class="reg-overall-badge ${c.status === 'ok' ? 'rob-green' : 'rob-gold'}">
+        ${c.status === 'ok' ? '✅ 진입 권장' : '⚠️ 주의 필요'}
+      </div>
+    </div>
+    <div class="reg-metrics">
+      <div class="reg-metric">
+        <div class="reg-metric-val" style="color:var(--red)">${c.banned.toLocaleString()}</div>
+        <div class="reg-metric-lbl">금지 성분</div>
+      </div>
+      <div class="reg-metric">
+        <div class="reg-metric-val" style="color:var(--gold)">${c.restricted.toLocaleString()}</div>
+        <div class="reg-metric-lbl">제한 성분</div>
+      </div>
+      <div class="reg-metric">
+        <div class="reg-metric-val" style="color:var(--green)">${c.approvedKBio.toLocaleString()}</div>
+        <div class="reg-metric-lbl">K-Bio 허가 원료</div>
+      </div>
+    </div>
+    <div class="reg-restrictions">
+      <h4>주요 제한 사항</h4>
+      ${restrictions.map(r => `
+        <div class="restriction-item">
+          <span class="ri-icon">⚠</span>
+          <span>${r}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="reg-restrictions" style="margin-top:16px">
+      <h4>K-Bio 원료 허용 예시</h4>
+      ${['아데노신', '히알루론산', '나이아신아미드', '세라마이드'].map(r => `
+        <div class="allowance-item">
+          <span class="ai-icon">✓</span>
+          <span>${r} — 용도 기준 내 허용</span>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:20px; padding:14px; background:var(--c-surface2); border-radius:var(--radius-sm); border:1px solid var(--c-border)">
+      <div style="font-family:var(--ff-mono); font-size:0.65rem; color:var(--t3); margin-bottom:6px; letter-spacing:1px; text-transform:uppercase">// 마지막 업데이트</div>
+      <div style="font-size:0.82rem; color:var(--t2)">${c.lastUpdate} · 자동 크롤링 기반 실시간 업데이트</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════
+// MARKETPLACE VIEW
+// ═══════════════════════════════════════════
+function renderMarketplace(cat = 'all') {
+  const grid = document.getElementById('marketGrid');
+  let items = [...DATA.ingredients];
+  if (cat !== 'all') items = items.filter(i => i.cat === cat);
+
+  const badges = [
+    { cls:'mcb-cert', label:'인증' }, { cls:'mcb-hot', label:'HOT' },
+    { cls:'mcb-new', label:'NEW' }, { cls:'mcb-cert', label:'인증' }, { cls:'mcb-hot', label:'↑인기' }
+  ];
+  const stars = ['★★★★★','★★★★☆','★★★★★','★★★★☆','★★★★★'];
+
+  grid.innerHTML = items.map((ing, idx) => {
+    const b = badges[idx % badges.length];
+    return `
+      <div class="market-card" onclick="openModal(${ing.id})">
+        <div class="market-card-img">
+          ${ing.icon}
+          <span class="market-card-badge ${b.cls}">${b.label}</span>
+        </div>
+        <div class="market-card-body">
+          <div class="mc-name">${ing.name}</div>
+          <div class="mc-supplier">${ing.supplier}</div>
+          <div class="mc-effects">
+            ${ing.effects.slice(0,2).map(e => `<span class="effect-tag">${e}</span>`).join('')}
+          </div>
+          <div class="mc-footer">
+            <div class="mc-price"><b>$${ing.price}</b>/${ing.unit}</div>
+            <div class="mc-stars">${stars[idx % stars.length]}</div>
+            <button class="mc-btn" onclick="event.stopPropagation(); showToast('${ing.name} 견적 요청 완료','success','📋')">견적 요청</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Market tabs
+document.getElementById('marketTabs').addEventListener('click', e => {
+  const tab = e.target.closest('.mfilter-tab');
+  if (!tab) return;
+  document.querySelectorAll('.mfilter-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  renderMarketplace(tab.dataset.cat);
+});
+
+// ═══════════════════════════════════════════
+// SAMPLES VIEW
+// ═══════════════════════════════════════════
+function renderSamples() {
+  const sampleList = document.getElementById('sampleList');
+  sampleList.innerHTML = DATA.samples.map(s => `
+    <div class="sample-item">
+      <div class="sample-item-top">
+        <div class="sample-name">${s.name}</div>
+        <span class="status-badge ${s.progress === 100 ? 'sb-completed' : 'sb-processing'}">${s.status}</span>
+      </div>
+      <div class="sample-id">${s.id}</div>
+      <div class="sample-progress">
+        <div class="sp-fill" style="width:${s.progress}%"></div>
+      </div>
+      <div class="sample-meta">
+        <span>${s.from} → ${s.to}</span>
+        <span>ETA: ${s.eta}</span>
+      </div>
+    </div>
+  `).join('');
+
+  const trackContent = document.getElementById('trackContent');
+  trackContent.innerHTML = DATA.trackSteps.map(step => `
+    <div class="track-step">
+      <div class="track-dot ${step.done ? 'td-done' : step.active ? 'td-active' : 'td-pending'}">
+        ${step.done ? '✓' : step.active ? '▶' : ''}
+      </div>
+      <div class="track-info">
+        <div class="track-title" style="color:${step.done ? 'var(--green)' : step.active ? 'var(--blue)' : 'var(--t3)'}">${step.title}</div>
+        <div class="track-desc">${step.desc}</div>
+        <div class="track-time">${step.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════
+// ANALYTICS CHARTS
+// ═══════════════════════════════════════════
+function initAnalyticsCharts() {
+  drawBarChart('analyticsChart1', 
+    ['주름 개선','보습','미백','항산화','항염','탄력'],
+    [95, 82, 78, 88, 71, 65],
+    '#00FFB2'
+  );
+  drawDonutChart('analyticsChart2',
+    [34, 22, 15, 12, 9, 8],
+    ['🇺🇸 미국','🇯🇵 일본','🇩🇪 독일','🇨🇳 중국','🇸🇬 싱가포르','🇦🇺 호주'],
+    ['#00FFB2','#00C2FF','#A855F7','#F59E0B','#FF4D6D','#22D3EE']
+  );
+  drawLineChart2('analyticsChart3');
+
+  const trendList = document.getElementById('trendingList');
+  trendList.innerHTML = DATA.trending.map(t => `
+    <div class="trend-item">
+      <div class="trend-rank">${t.rank}</div>
+      <div class="trend-info">
+        <div class="trend-name">${t.name}</div>
+        <div class="trend-cat">${t.cat}</div>
+      </div>
+      <div class="trend-change">${t.change}</div>
+    </div>
+  `).join('');
+}
+
+function drawBarChart(id, labels, data, color) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 400; canvas.width = W; canvas.height = 200;
+  const H = 200, pad = { t:20, r:20, b:40, l:20 };
+  const cW = W - pad.l - pad.r; const cH = H - pad.t - pad.b;
+  const barW = (cW / labels.length) * 0.55;
+  const gap   = cW / labels.length;
+  ctx.clearRect(0, 0, W, H);
+  data.forEach((v, i) => {
+    const x = pad.l + gap * i + gap * 0.2;
+    const barH = (v / 100) * cH;
+    const y = pad.t + cH - barH;
+    const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+    grad.addColorStop(0, color + 'DD');
+    grad.addColorStop(1, color + '33');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]) : ctx.rect(x, y, barW, barH);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(237,244,255,0.4)'; ctx.font = '10px Noto Sans KR,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(labels[i], x + barW/2, H - 10);
+    ctx.fillStyle = color; ctx.font = 'bold 11px JetBrains Mono,monospace';
+    ctx.fillText(v + '%', x + barW/2, y - 6);
+  });
+}
+
+function drawDonutChart(id, data, labels, colors) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 300; canvas.width = W; canvas.height = 200;
+  const cx = W / 2 - 30, cy = 100, r = 75, innerR = 45;
+  const total = data.reduce((a, b) => a + b, 0);
+  let angle = -Math.PI / 2;
+  ctx.clearRect(0, 0, W, 200);
+  data.forEach((v, i) => {
+    const sweep = (v / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + sweep);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    angle += sweep;
+  });
+  // Inner circle
+  ctx.beginPath(); ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = '#080F1E'; ctx.fill();
+  // Center text
+  ctx.fillStyle = '#00FFB2'; ctx.font = 'bold 13px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  ctx.fillText('6개국', cx, cy - 4);
+  ctx.fillStyle = 'rgba(237,244,255,0.4)'; ctx.font = '10px Noto Sans KR,sans-serif';
+  ctx.fillText('시장 점유', cx, cy + 12);
+  // Legend
+  const lx = W - 110;
+  labels.forEach((l, i) => {
+    const ly = 30 + i * 28;
+    ctx.fillStyle = colors[i]; ctx.fillRect(lx, ly, 10, 10);
+    ctx.fillStyle = 'rgba(237,244,255,0.55)'; ctx.font = '10px Noto Sans KR,sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${l} ${data[i]}%`, lx + 14, ly + 9);
+  });
+}
+
+function drawLineChart2(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 500; canvas.width = W; canvas.height = 180;
+  const H = 180, pad = { t:20, r:20, b:30, l:50 };
+  const cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+  const ings = ['아데노신','병풀추출물','나이아신아미드'];
+  const colors = ['#00FFB2','#00C2FF','#A855F7'];
+  const datasets = [
+    [180, 185, 178, 190, 195, 188, 200, 210, 205, 215, 218, 220],
+    [90, 88, 95, 92, 98, 105, 110, 108, 115, 120, 118, 125],
+    [60, 62, 65, 64, 68, 70, 72, 75, 74, 78, 80, 82],
+  ];
+  const maxV = 240;
+  ctx.clearRect(0, 0, W, H);
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (cH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = 'rgba(237,244,255,0.25)'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'right';
+    ctx.fillText('$' + Math.round(maxV - (maxV/4)*i), pad.l - 6, y + 4);
+  }
+  datasets.forEach((ds, di) => {
+    const pts = ds.map((v, i) => ({
+      x: pad.l + (cW / (ds.length - 1)) * i,
+      y: pad.t + cH - (v / maxV) * cH,
+    }));
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+    ctx.strokeStyle = colors[di]; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+    const last = pts[pts.length-1];
+    ctx.beginPath(); ctx.arc(last.x, last.y, 4, 0, Math.PI*2);
+    ctx.fillStyle = colors[di]; ctx.fill();
+    ctx.fillStyle = colors[di]; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'left';
+    ctx.fillText(ings[di], last.x + 6, last.y + 4);
+  });
+}
+
+// ═══════════════════════════════════════════
+// DB TABLE
+// ═══════════════════════════════════════════
+function renderDBTable(q = '') {
+  const body = document.getElementById('dbTableBody');
+  let items = DATA.ingredients;
+  if (q) items = items.filter(i =>
+    i.name.includes(q) || i.inci.toLowerCase().includes(q.toLowerCase()) || i.cas.includes(q)
+  );
+  body.innerHTML = items.map(ing => `
+    <tr style="cursor:pointer" onclick="openModal(${ing.id})">
+      <td>${ing.icon} ${ing.name}</td>
+      <td style="font-family:var(--ff-mono); font-size:0.75rem; color:var(--t3)">${ing.inci}</td>
+      <td style="font-family:var(--ff-mono); font-size:0.75rem; color:var(--t3)">${ing.cas}</td>
+      <td>${ing.effects.slice(0,2).join(', ')}</td>
+      <td style="color:var(--green); font-family:var(--ff-mono)">Grade ${ing.ewg}</td>
+      <td>${ing.fda  ? '✅' : '❌'}</td>
+      <td>${ing.eu   ? '✅' : '❌'}</td>
+      <td style="font-family:var(--ff-mono); color:var(--green)">${ing.score.toFixed(1)}%</td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('dbSearch')?.addEventListener('input', e => renderDBTable(e.target.value));
+
+// ═══════════════════════════════════════════
+// CHART TAB INTERACTIONS
+// ═══════════════════════════════════════════
+document.querySelectorAll('.chart-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    // Re-render with slightly different data to simulate time periods
+    renderTrendChart();
+    showToast(`${tab.textContent} 기간 데이터 로드 완료`, 'info', '📊');
+  });
+});
+
+// ═══════════════════════════════════════════
+// QUICK SEARCH IN TOPBAR
+// ═══════════════════════════════════════════
+document.querySelector('.content-topbar .search-bar-mini input')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const q = e.target.value;
+    if (q) {
+      switchView('search');
+      document.getElementById('searchInput').value = q;
+      renderSearchResults(q);
+      showToast(`"${q}" 검색으로 이동`, 'info', '🔍');
+    }
+  }
+});
+
+// ═══════════════════════════════════════════
+// RESIZE HANDLER
+// ═══════════════════════════════════════════
+window.addEventListener('resize', () => {
+  const activeView = document.querySelector('.view.active')?.id;
+  if (activeView === 'view-dashboard') renderTrendChart();
+  if (activeView === 'view-analytics') initAnalyticsCharts();
+});
+
+// ═══════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════
+function init() {
+  renderDashboard();
+  renderSearchResults();
+  renderRegulatory();
+  renderMarketplace();
+  renderSamples();
+  renderDBTable();
+  animateCounters();
+
+  // Welcome toast after slight delay
+  setTimeout(() => showToast('BioNexus AI 플랫폼에 오신 것을 환영합니다 🧬', 'success', '✨'), 800);
+  setTimeout(() => showToast('규제 변경 알림 3건이 있습니다', 'info', '⚠️'), 2200);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>
