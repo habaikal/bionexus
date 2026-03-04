@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Search, Globe, TrendingUp, Package, Zap, ChevronRight, Menu, X, 
-  Database, Target, Truck, Languages, Activity, Award, Box, ShieldCheck, Star, 
-  ArrowRight, FileText, Filter
+import { useState } from 'react';
+import {
+  Globe, TrendingUp, Package, Zap, ChevronRight,
+  Database, Target, Truck, Languages, Activity, ShieldCheck, Star,
+  ArrowRight, Filter
 } from 'lucide-react';
 
 export default function BioNexusPlatform() {
@@ -60,20 +60,20 @@ export default function BioNexusPlatform() {
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/30 text-emerald-400 rounded-full text-sm font-semibold mb-8 animate-pulse shadow-[0_0_20px_rgba(16,185,129,0.2)]">
         <Zap size={16} /> BioNexus AI Platform v2.0
       </div>
-      
+
       <h2 className="text-5xl md:text-7xl font-extrabold mb-8 text-center leading-tight tracking-tight">
         <span className="text-white drop-shadow-md">{t.title1}</span><br />
         <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
           {t.title2}
         </span>
       </h2>
-      
+
       <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto text-center leading-relaxed font-light">
         {t.dashboardInfo}
       </p>
-      
+
       <div className="flex flex-col sm:flex-row gap-6">
-        <button 
+        <button
           onClick={() => setView('dashboard')}
           className="group px-10 py-5 bg-gradient-to-r from-emerald-500 to-blue-600 text-white rounded-full font-bold text-lg hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"
         >
@@ -87,8 +87,8 @@ export default function BioNexusPlatform() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 w-full">
         {[{ icon: <Database />, title: 'Smart DB', desc: '1,500+ Korean bio-ingredients' },
-          { icon: <Target />, title: 'AI Matching', desc: 'Global trend-based auto matching' },
-          { icon: <Truck />, title: 'Trade One-Stop', desc: 'Integrated export-import logistics' }].map((feature, idx) => (
+        { icon: <Target />, title: 'AI Matching', desc: 'Global trend-based auto matching' },
+        { icon: <Truck />, title: 'Trade One-Stop', desc: 'Integrated export-import logistics' }].map((feature, idx) => (
           <div key={idx} className="bg-slate-900/40 backdrop-blur-xl border border-white/5 rounded-3xl p-8 hover:border-emerald-500/30 transition-colors">
             <div className="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6">
               {feature.icon}
@@ -106,16 +106,16 @@ export default function BioNexusPlatform() {
   // ==========================================
   const renderDashboardView = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both">
-      
+
       {/* Search Hero */}
       <div className="relative bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 mb-8 overflow-hidden shadow-2xl">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-        
+
         <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
           <Activity className="text-emerald-400 animate-pulse" />
           {t.dbTitle}
         </h3>
-        
+
         <div className="flex flex-col md:flex-row items-center bg-black/40 border border-emerald-500/30 rounded-2xl overflow-hidden focus-within:border-emerald-400 focus-within:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all">
           <div className="hidden md:flex px-6 border-r border-emerald-500/20 items-center justify-center gap-3 text-emerald-400 font-mono text-xs font-bold uppercase tracking-widest h-16 w-48">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
@@ -135,7 +135,7 @@ export default function BioNexusPlatform() {
             SEARCH
           </button>
         </div>
-        
+
         <div className="flex gap-3 mt-6">
           {['Centella Asiatica', 'Ginseng Saponin', 'Exosome', 'Vegan Collagen'].map((tag, idx) => (
             <span key={idx} className="px-4 py-1.5 text-xs text-slate-300 bg-white/5 border border-white/10 rounded-full cursor-pointer hover:bg-emerald-500/20 hover:text-emerald-400 hover:border-emerald-500/30 transition-all">
@@ -152,13 +152,13 @@ export default function BioNexusPlatform() {
           { icon: <Target />, title: t.kpi.matches, value: '98.5%', color: 'text-blue-400', border: 'border-blue-500/30', bgIcon: 'bg-blue-500/10' },
           { icon: <Globe />, title: t.kpi.regulations, value: '89 Nations', color: 'text-purple-400', border: 'border-purple-500/30', bgIcon: 'bg-purple-500/10' },
         ].map((kpi, idx) => (
-          <div key={idx} className={`bg-slate-900/60 backdrop-blur-xl border ${kpi.border} rounded-2xl p-6 flex items-center gap-5 hover:-translate-y-1 hover:shadow-lg transition-all`}>
-            <div className={`p-4 rounded-xl ${kpi.bgIcon} ${kpi.color}`}>
+          <div key={idx} className={`bg - slate - 900 / 60 backdrop - blur - xl border ${kpi.border} rounded - 2xl p - 6 flex items - center gap - 5 hover: -translate - y - 1 hover: shadow - lg transition - all`}>
+            <div className={`p - 4 rounded - xl ${kpi.bgIcon} ${kpi.color} `}>
               {kpi.icon}
             </div>
             <div>
               <div className="text-xs text-slate-400 mb-1 font-mono uppercase tracking-wider">{kpi.title}</div>
-              <div className={`text-4xl font-extrabold ${kpi.color}`}>{kpi.value}</div>
+              <div className={`text - 4xl font - extrabold ${kpi.color} `}>{kpi.value}</div>
             </div>
           </div>
         ))}
@@ -181,7 +181,7 @@ export default function BioNexusPlatform() {
             ].map((reg, idx) => (
               <div key={idx} className="flex justify-between items-center p-4 bg-black/30 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
                 <span className="text-slate-300 font-medium text-sm">{reg.region}</span>
-                <span className={`px-3 py-1 border rounded-full text-xs font-semibold tracking-wide ${reg.color}`}>{reg.status}</span>
+                <span className={`px - 3 py - 1 border rounded - full text - xs font - semibold tracking - wide ${reg.color} `}>{reg.status}</span>
               </div>
             ))}
           </div>
@@ -207,7 +207,7 @@ export default function BioNexusPlatform() {
                   <span className="text-xs font-mono text-blue-400 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20">In Transit</span>
                 </div>
                 <div className="w-full bg-slate-800 rounded-full h-2 mb-3">
-                  <div className={`bg-gradient-to-r ${item.col} h-2 rounded-full`} style={{ width: `${item.prog}%` }}></div>
+                  <div className={`bg - gradient - to - r ${item.col} h - 2 rounded - full`} style={{ width: `${item.prog}% ` }}></div>
                 </div>
                 <div className="flex justify-between text-xs text-slate-400">
                   <span className="flex items-center gap-1"><ArrowRight size={12} /> Seoul, KR</span>
@@ -234,7 +234,7 @@ export default function BioNexusPlatform() {
           ].map((item, idx) => (
             <div key={idx} className="bg-black/30 border border-white/5 rounded-xl p-4 cursor-pointer hover:border-emerald-500/40 hover:-translate-y-1 transition-all">
               <div className="flex justify-between items-start mb-4">
-                <div className={`text-[10px] font-bold px-2 py-0.5 rounded border ${item.color}`}>{item.tag}</div>
+                <div className={`text - [10px] font - bold px - 2 py - 0.5 rounded border ${item.color} `}>{item.tag}</div>
                 <div className="flex items-center text-yellow-400 text-xs gap-1"><Star size={12} className="fill-yellow-400" /> 4.9</div>
               </div>
               <h5 className="text-sm font-bold text-white mb-1">Premium CICA Extract</h5>
@@ -266,7 +266,7 @@ export default function BioNexusPlatform() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo area */}
-            <div 
+            <div
               className="flex items-center space-x-4 cursor-pointer group"
               onClick={() => setView('landing')}
             >
@@ -297,7 +297,7 @@ export default function BioNexusPlatform() {
                       <button
                         key={lang.code}
                         onClick={() => { setLanguage(lang.code); setLangMenuOpen(false); }}
-                        className={`w-full text-left px-5 py-3 text-sm hover:bg-white/5 transition-all flex items-center gap-3 ${language === lang.code ? 'text-emerald-400 bg-emerald-500/10 font-medium' : 'text-slate-300'}`}
+                        className={`w - full text - left px - 5 py - 3 text - sm hover: bg - white / 5 transition - all flex items - center gap - 3 ${language === lang.code ? 'text-emerald-400 bg-emerald-500/10 font-medium' : 'text-slate-300'} `}
                       >
                         <span className="text-lg">{lang.flag}</span>
                         {lang.label}
@@ -306,7 +306,7 @@ export default function BioNexusPlatform() {
                   </div>
                 )}
               </div>
-              
+
               {view === 'dashboard' && (
                 <div className="hidden md:flex items-center gap-3 bg-slate-800/50 px-5 py-2 rounded-full border border-white/5 cursor-pointer hover:bg-slate-700/50 transition-colors">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex justify-center items-center font-bold text-xs text-white shadow-inner">AD</div>
@@ -322,7 +322,7 @@ export default function BioNexusPlatform() {
       <main className="relative z-10 w-full pt-20">
         {view === 'landing' ? renderLandingView() : renderDashboardView()}
       </main>
-      
+
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/10 bg-[#03060C]/90 mt-20 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
